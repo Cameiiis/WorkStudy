@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>WorkStudy — Working Student System</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #0d0f14; --surface: #141720; --card: #1a1e2e;
+      --accent: #f0c040; --accent2: #5b8cff; --accent3: #ff6b6b; --accent4: #50e3a4;
+      --text: #e8eaf0; --muted: #7a7f9a; --border: rgba(255,255,255,0.07);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: 'Plus Jakarta Sans', sans-serif; min-height: 100vh; line-height: 1.6; letter-spacing: 0.01em; }
+    select, select option { background: #1e2235 !important; color: #e8eaf0 !important; }
+    select { color-scheme: dark; }
+
+    /* AUTH */
+    #authScreen { min-height:100vh; display:flex; align-items:center; justify-content:center;
+      background: radial-gradient(ellipse at 30% 40%, rgba(91,140,255,0.08) 0%, transparent 60%),
+                  radial-gradient(ellipse at 70% 70%, rgba(240,192,64,0.06) 0%, transparent 60%), var(--bg); }
+    .auth-box { background:var(--card); border:1px solid var(--border); border-radius:20px; padding:40px 36px; width:100%; max-width:420px; }
+    .auth-logo { font-family:'Space Grotesk',sans-serif; font-size:1.6rem; font-weight:800; margin-bottom:6px; }
+    .auth-logo span { color:var(--accent); }
+    .auth-sub { color:var(--muted); font-size:0.85rem; margin-bottom:28px; }
+    .auth-tabs { display:flex; gap:0; margin-bottom:24px; background:rgba(255,255,255,0.04); border-radius:10px; padding:3px; }
+    .auth-tab { flex:1; text-align:center; padding:8px; border-radius:8px; font-size:0.82rem; font-weight:600; cursor:pointer; color:var(--muted); font-family:'Space Grotesk',sans-serif; transition:all 0.2s; }
+    .auth-tab.active { background:var(--accent); color:#0d0f14; }
+    .form-group { margin-bottom:16px; }
+    .lbl { font-size:0.72rem; font-weight:600; text-transform:uppercase; letter-spacing:0.8px; color:var(--muted); margin-bottom:6px; display:block; }
+    .inp { background:rgba(255,255,255,0.05); border:1px solid var(--border); border-radius:10px; color:var(--text); padding:11px 14px; font-size:0.88rem; width:100%; outline:none; font-family:'Plus Jakarta Sans',sans-serif; transition:border-color 0.2s; }
+    .inp:focus { border-color:var(--accent); background:rgba(240,192,64,0.04); }
+    .btn-main { background:var(--accent); color:#0d0f14; border:none; border-radius:10px; padding:12px; font-size:0.88rem; font-weight:700; font-family:'Space Grotesk',sans-serif; width:100%; cursor:pointer; transition:opacity 0.2s; margin-top:4px; }
+    .btn-main:hover { opacity:0.85; }
+    .err-msg { color:var(--accent3); font-size:0.78rem; margin-top:10px; text-align:center; min-height:18px; }
+
+    /* SETUP */
+    #setupScreen { min-height:100vh; display:none; align-items:center; justify-content:center; background:var(--bg); padding:20px; }
+    .setup-box { background:var(--card); border:1px solid var(--border); border-radius:20px; padding:36px; width:100%; max-width:580px; }
+    .setup-step { display:none; }
+    .setup-step.active { display:block; animation:fadeIn 0.3s ease; }
+    .step-dots { display:flex; gap:6px; margin-bottom:28px; }
+    .sdot { height:4px; border-radius:99px; flex:1; background:rgba(255,255,255,0.1); transition:background 0.3s; }
+    .sdot.done { background:var(--accent); }
+    .setup-title { font-family:'Space Grotesk',sans-serif; font-size:1.3rem; font-weight:800; margin-bottom:4px; }
+    .setup-desc { color:var(--muted); font-size:0.83rem; margin-bottom:22px; }
+    .g2 { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+    .g3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px; }
+    .setup-nav { display:flex; gap:10px; margin-top:22px; }
+    .btn-out { background:transparent; color:var(--muted); border:1px solid var(--border); border-radius:10px; padding:11px 18px; font-size:0.85rem; font-weight:600; font-family:'Space Grotesk',sans-serif; cursor:pointer; transition:all 0.2s; }
+    .btn-out:hover { color:var(--text); border-color:rgba(255,255,255,0.2); }
+    .dlist { margin-top:12px; }
+    .ditem { display:flex; align-items:center; gap:10px; background:rgba(255,255,255,0.03); border:1px solid var(--border); border-radius:8px; padding:9px 12px; margin-bottom:8px; font-size:0.83rem; }
+    .ditem .dtxt { flex:1; }
+    .ditem .drm { color:var(--accent3); cursor:pointer; }
+    .tag { display:inline-block; border-radius:6px; padding:2px 9px; font-size:0.7rem; font-weight:600; }
+    .tblue { background:rgba(91,140,255,0.12); color:var(--accent2); }
+    .tyellow { background:rgba(240,192,64,0.12); color:var(--accent); }
+    .tgreen { background:rgba(80,227,164,0.12); color:var(--accent4); }
+    .tred { background:rgba(255,107,107,0.12); color:var(--accent3); }
+
+    /* APP */
+    #appScreen { display:none; }
+    .sidebar { position:fixed; left:0; top:0; bottom:0; width:230px; background:var(--surface); border-right:1px solid var(--border); display:flex; flex-direction:column; padding:28px 0 20px; z-index:100; }
+    .slogo { padding:0 24px 28px; font-family:'Space Grotesk',sans-serif; font-size:1.3rem; font-weight:800; }
+    .slogo span { color:var(--accent); }
+    .nlabel { font-size:0.63rem; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; color:var(--muted); padding:0 24px 8px; margin-top:10px; }
+    .nitem { display:flex; align-items:center; gap:12px; padding:11px 24px; color:var(--muted); cursor:pointer; font-size:0.87rem; font-weight:500; transition:all 0.2s; border-left:3px solid transparent; }
+    .nitem:hover { color:var(--text); background:rgba(255,255,255,0.04); }
+    .nitem.active { color:var(--accent); border-left-color:var(--accent); background:rgba(240,192,64,0.07); }
+    .nitem i { font-size:1rem; width:18px; text-align:center; }
+    .sfooter { margin-top:auto; padding:16px 24px; border-top:1px solid var(--border); }
+    .ava { width:34px; height:34px; border-radius:50%; background:linear-gradient(135deg, var(--accent2), var(--accent)); display:flex; align-items:center; justify-content:center; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:0.8rem; color:#0d0f14; }
+    .main { margin-left:230px; padding:32px 36px; min-height:100vh; }
+    .ptitle { font-family:'Space Grotesk',sans-serif; font-size:1.55rem; font-weight:800; }
+    .psub { color:var(--muted); font-size:0.84rem; margin-top:2px; }
+    .topbar { display:flex; align-items:center; justify-content:space-between; margin-bottom:28px; }
+    .section { display:none; animation:fadeIn 0.3s ease; }
+    .section.active { display:block; }
+    @keyframes fadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+    .sgrid { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:24px; }
+    .sc { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:20px; position:relative; overflow:hidden; }
+    .sc::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; }
+    .sc.c1::before { background:var(--accent); } .sc.c2::before { background:var(--accent2); }
+    .sc.c3::before { background:var(--accent4); } .sc.c4::before { background:var(--accent3); }
+    .slbl { font-size:0.7rem; color:var(--muted); font-weight:500; text-transform:uppercase; letter-spacing:0.8px; margin-bottom:8px; }
+    .sval { font-family:'Space Grotesk',sans-serif; font-size:1.75rem; font-weight:800; line-height:1; }
+    .ssub { font-size:0.73rem; color:var(--muted); margin-top:6px; }
+    .sico { position:absolute; right:16px; top:16px; font-size:1.4rem; opacity:0.15; }
+    .cbox { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:22px; margin-bottom:20px; }
+    .ctitle { font-family:'Space Grotesk',sans-serif; font-size:0.98rem; font-weight:700; margin-bottom:16px; display:flex; align-items:center; gap:8px; }
+    .ctitle i { color:var(--accent); }
+    .tbl { width:100%; border-collapse:collapse; }
+    .tbl th { font-size:0.68rem; text-transform:uppercase; letter-spacing:1px; color:var(--muted); font-weight:600; padding:0 12px 10px; text-align:left; }
+    .tbl td { padding:10px 12px; font-size:0.84rem; border-top:1px solid var(--border); }
+    .tbl tr:hover td { background:rgba(255,255,255,0.02); }
+    .empty { text-align:center; padding:28px; color:var(--muted); font-size:0.84rem; }
+    .empty i { font-size:2rem; margin-bottom:8px; display:block; opacity:0.3; }
+    .pbar { height:6px; border-radius:99px; background:rgba(255,255,255,0.07); overflow:hidden; margin-top:5px; }
+    .pfill { height:100%; border-radius:99px; transition:width 0.8s ease; }
+    .grow { margin-bottom:14px; }
+    .growl { display:flex; justify-content:space-between; font-size:0.82rem; margin-bottom:5px; }
+    .rbanner { background:rgba(255,107,107,0.08); border:1px solid rgba(255,107,107,0.2); border-radius:10px; padding:14px 16px; display:flex; align-items:center; gap:12px; margin-bottom:20px; font-size:0.83rem; }
+    .rbanner i { color:var(--accent3); font-size:1.1rem; flex-shrink:0; }
+    .aitem { display:flex; align-items:flex-start; gap:12px; padding:12px 0; border-bottom:1px solid var(--border); }
+    .aitem:last-child { border-bottom:none; }
+    .adot { width:8px; height:8px; border-radius:50%; margin-top:5px; flex-shrink:0; }
+    .aitem p { font-size:0.83rem; margin:0; }
+    .aitem small { color:var(--muted); font-size:0.71rem; }
+    .bsm { background:var(--accent); color:#0d0f14; border:none; border-radius:7px; padding:6px 14px; font-size:0.78rem; font-weight:700; font-family:'Space Grotesk',sans-serif; cursor:pointer; }
+    .dsm { background:rgba(255,107,107,0.1); color:var(--accent3); border:1px solid rgba(255,107,107,0.2); border-radius:7px; padding:4px 10px; font-size:0.75rem; cursor:pointer; }
+    @media(max-width:991px){ .sidebar{display:none;} .main{margin-left:0;padding:16px;} .sgrid{grid-template-columns:repeat(2,1fr);} }
+  </style>
+</head>
+<body>
+
+<!-- AUTH -->
+<div id="authScreen">
+  <div class="auth-box">
+    <div class="auth-logo">Work<span>Study</span></div>
+    <div class="auth-sub">Your all-in-one working student dashboard</div>
+    <div class="auth-tabs">
+      <div class="auth-tab active" id="tabL" onclick="switchTab('login')">Login</div>
+      <div class="auth-tab" id="tabR" onclick="switchTab('register')">Register</div>
+    </div>
+    <div id="loginForm">
+      <div class="form-group"><label class="lbl">Email</label><input class="inp" id="lEmail" type="email" placeholder="you@email.com"/></div>
+      <div class="form-group"><label class="lbl">Password</label><input class="inp" id="lPass" type="password" placeholder="••••••••"/></div>
+      <button class="btn-main" onclick="doLogin()">Login</button>
+      <div class="err-msg" id="lErr"></div>
+    </div>
+    <div id="regForm" style="display:none">
+      <div class="form-group"><label class="lbl">Full Name</label><input class="inp" id="rName" type="text" placeholder="Juan dela Cruz"/></div>
+      <div class="form-group"><label class="lbl">Email</label><input class="inp" id="rEmail" type="email" placeholder="you@email.com"/></div>
+      <div class="form-group"><label class="lbl">Password</label><input class="inp" id="rPass" type="password" placeholder="Min. 6 characters"/></div>
+      <div class="form-group"><label class="lbl">Confirm Password</label><input class="inp" id="rPass2" type="password" placeholder="Repeat password"/></div>
+      <button class="btn-main" onclick="doRegister()">Create Account</button>
+      <div class="err-msg" id="rErr"></div>
+    </div>
+  </div>
+</div>
+
+<!-- SETUP WIZARD -->
+<div id="setupScreen">
+  <div class="setup-box">
+    <div class="step-dots">
+      <div class="sdot done" id="d0"></div><div class="sdot" id="d1"></div>
+      <div class="sdot" id="d2"></div><div class="sdot" id="d3"></div>
+    </div>
+
+    <!-- Step 0: Profile -->
+    <div class="setup-step active" id="st0">
+      <div class="setup-title">👋 Let's set up your profile</div>
+      <div class="setup-desc">Tell us a bit about yourself to personalize your dashboard.</div>
+      <div class="g2">
+        <div class="form-group"><label class="lbl">School / University</label><input class="inp" id="p_school" type="text" placeholder="e.g. Notre Dame of Marbel"/></div>
+        <div class="form-group"><label class="lbl">Course</label><input class="inp" id="p_course" type="text" placeholder="e.g. BSIT"/></div>
+        <div class="form-group"><label class="lbl">Year Level</label>
+          <select class="inp" id="p_year"><option value="">Select...</option><option>1st Year</option><option>2nd Year</option><option>3rd Year</option><option>4th Year</option></select></div>
+        <div class="form-group"><label class="lbl">Monthly Work Income (₱)</label><input class="inp" id="p_income" type="number" placeholder="e.g. 6500"/></div>
+      </div>
+      <div class="form-group"><label class="lbl">Job / Work Description</label><input class="inp" id="p_job" type="text" placeholder="e.g. Part-time cashier at 7-Eleven"/></div>
+      <div class="setup-nav"><button class="btn-main" onclick="gotoStep(1)">Next →</button></div>
+    </div>
+
+    <!-- Step 1: Schedule -->
+    <div class="setup-step" id="st1">
+      <div class="setup-title">🗓️ Add your schedule</div>
+      <div class="setup-desc">Add your class and work schedules for the week.</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr auto;gap:10px;align-items:end;">
+        <div><label class="lbl">Day</label>
+          <select class="inp" id="ss_day"><option>Monday</option><option>Tuesday</option><option>Wednesday</option><option>Thursday</option><option>Friday</option><option>Saturday</option><option>Sunday</option></select></div>
+        <div><label class="lbl">Start</label><input class="inp" id="ss_start" type="time"/></div>
+        <div><label class="lbl">End</label><input class="inp" id="ss_end" type="time"/></div>
+        <div><label class="lbl">Type</label><select class="inp" id="ss_type"><option>Class</option><option>Work</option></select></div>
+        <div><label class="lbl" style="opacity:0">.</label><button class="bsm" onclick="addSetupSched()">Add</button></div>
+      </div>
+      <div style="margin-top:10px;"><label class="lbl">Activity / Subject Name</label><input class="inp" id="ss_name" type="text" placeholder="e.g. Database Management or Work Shift"/></div>
+      <div class="dlist" id="schedSetupList"></div>
+      <div class="setup-nav"><button class="btn-out" onclick="gotoStep(0)">← Back</button><button class="btn-main" onclick="gotoStep(2)">Next →</button></div>
+    </div>
+
+    <!-- Step 2: Subjects -->
+    <div class="setup-step" id="st2">
+      <div class="setup-title">📚 Add your subjects</div>
+      <div class="setup-desc">Enter subjects you are enrolled in this semester.</div>
+      <div class="g3" style="align-items:end;">
+        <div><label class="lbl">Subject Name</label><input class="inp" id="sg_name" type="text" placeholder="e.g. Database Management"/></div>
+        <div><label class="lbl">Units</label><input class="inp" id="sg_units" type="number" placeholder="3" min="1" max="6"/></div>
+        <div><label class="lbl" style="opacity:0">.</label><button class="bsm" onclick="addSetupSubject()">Add</button></div>
+      </div>
+      <div class="dlist" id="subjSetupList"></div>
+      <div class="setup-nav"><button class="btn-out" onclick="gotoStep(1)">← Back</button><button class="btn-main" onclick="gotoStep(3)">Next →</button></div>
+    </div>
+
+    <!-- Step 3: Budget -->
+    <div class="setup-step" id="st3">
+      <div class="setup-title">💸 Set your monthly budget limits</div>
+      <div class="setup-desc">We'll alert you when you're approaching or over these limits.</div>
+      <div class="g2">
+        <div class="form-group"><label class="lbl">Tuition (₱)</label><input class="inp" id="bl_tuition" type="number" placeholder="e.g. 1500"/></div>
+        <div class="form-group"><label class="lbl">Rent / Bills (₱)</label><input class="inp" id="bl_rent" type="number" placeholder="e.g. 2000"/></div>
+        <div class="form-group"><label class="lbl">Food (₱)</label><input class="inp" id="bl_food" type="number" placeholder="e.g. 1000"/></div>
+        <div class="form-group"><label class="lbl">Transport (₱)</label><input class="inp" id="bl_transport" type="number" placeholder="e.g. 500"/></div>
+        <div class="form-group"><label class="lbl">Others (₱)</label><input class="inp" id="bl_others" type="number" placeholder="e.g. 300"/></div>
+        <div class="form-group"><label class="lbl">Max Work Hours / Week</label><input class="inp" id="bl_maxhrs" type="number" placeholder="e.g. 40"/></div>
+      </div>
+      <div class="setup-nav"><button class="btn-out" onclick="gotoStep(2)">← Back</button><button class="btn-main" onclick="finishSetup()">🚀 Launch Dashboard</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="appScreen">
+  <nav class="sidebar">
+    <div class="slogo">Work<span>Study</span></div>
+    <div class="nlabel">Main</div>
+    <div class="nitem active" onclick="showSec('dashboard',this)"><i class="bi bi-grid-1x2"></i> Dashboard</div>
+    <div class="nitem" onclick="showSec('schedule',this)"><i class="bi bi-calendar3"></i> Schedule</div>
+    <div class="nitem" onclick="showSec('budget',this)"><i class="bi bi-wallet2"></i> Budget</div>
+    <div class="nitem" onclick="showSec('grades',this)"><i class="bi bi-mortarboard"></i> Grades</div>
+    <div class="nitem" onclick="showSec('alerts',this)"><i class="bi bi-bell"></i> Alerts <span class="ms-auto tag tred" id="abadge" style="font-size:0.64rem;padding:2px 7px;display:none"></span></div>
+    <div class="sfooter">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div class="ava" id="sAva">?</div>
+        <div><div style="font-size:0.82rem;font-weight:600;" id="sName">—</div><div style="font-size:0.72rem;color:var(--muted);" id="sCourse">—</div></div>
+      </div>
+      <div class="nitem" style="padding:10px 0;color:var(--accent3);margin-top:10px;" onclick="doLogout()"><i class="bi bi-box-arrow-left"></i> Logout</div>
+    </div>
+  </nav>
+  <main class="main">
+
+    <!-- DASHBOARD -->
+    <section class="section active" id="dashboard">
+      <div class="topbar">
+        <div><div class="ptitle" id="dGreet">Dashboard</div><div class="psub" id="dDate"></div></div>
+      </div>
+      <div id="rBanner" style="display:none" class="rbanner"><i class="bi bi-exclamation-triangle-fill"></i><div id="rBannerTxt"></div></div>
+      <div class="sgrid">
+        <div class="sc c1"><div class="sico"><i class="bi bi-clock"></i></div><div class="slbl">Work Hrs / Week</div><div class="sval" style="color:var(--accent)" id="dWork">—</div><div class="ssub" id="dWorkSub">—</div></div>
+        <div class="sc c2"><div class="sico"><i class="bi bi-wallet2"></i></div><div class="slbl">Budget Balance</div><div class="sval" style="color:var(--accent2)" id="dBal">₱0</div><div class="ssub" id="dBalSub">—</div></div>
+        <div class="sc c3"><div class="sico"><i class="bi bi-mortarboard"></i></div><div class="slbl">Average Grade</div><div class="sval" style="color:var(--accent4)" id="dGPA">—</div><div class="ssub" id="dGPASub">—</div></div>
+        <div class="sc c4"><div class="sico"><i class="bi bi-calendar-x"></i></div><div class="slbl">Conflicts</div><div class="sval" style="color:var(--accent3)" id="dConf">0</div><div class="ssub">Work-class overlaps</div></div>
+      </div>
+      <div class="row g-4">
+        <div class="col-lg-6"><div class="cbox"><div class="ctitle"><i class="bi bi-calendar3"></i> Today's Schedule</div><div id="dTodaySched"></div></div></div>
+        <div class="col-lg-6"><div class="cbox"><div class="ctitle"><i class="bi bi-graph-up"></i> Grade Overview</div><div id="dGrades"></div></div></div>
+        <div class="col-lg-6"><div class="cbox"><div class="ctitle"><i class="bi bi-wallet2"></i> Budget Overview</div><div id="dBudget"></div></div></div>
+        <div class="col-lg-6"><div class="cbox"><div class="ctitle"><i class="bi bi-bell"></i> Recent Alerts</div><div id="dAlerts"></div></div></div>
+      </div>
+    </section>
+
+    <!-- SCHEDULE -->
+    <section class="section" id="schedule">
+      <div class="topbar"><div><div class="ptitle">Schedule Manager</div><div class="psub">Manage your weekly class and work schedule</div></div></div>
+      <div class="row g-4">
+        <div class="col-lg-5">
+          <div class="cbox">
+            <div class="ctitle"><i class="bi bi-plus-circle"></i> Add Entry</div>
+            <div class="form-group"><label class="lbl">Activity / Subject</label><input class="inp" id="ap_name" type="text" placeholder="e.g. Math class or Work Shift"/></div>
+            <div class="g2" style="margin-bottom:14px;">
+              <div><label class="lbl">Day</label><select class="inp" id="ap_day"><option>Monday</option><option>Tuesday</option><option>Wednesday</option><option>Thursday</option><option>Friday</option><option>Saturday</option><option>Sunday</option></select></div>
+              <div><label class="lbl">Type</label><select class="inp" id="ap_type"><option>Class</option><option>Work</option></select></div>
+              <div><label class="lbl">Start Time</label><input class="inp" id="ap_start" type="time"/></div>
+              <div><label class="lbl">End Time</label><input class="inp" id="ap_end" type="time"/></div>
+            </div>
+            <button class="btn-main" onclick="addSched()">Add to Schedule</button>
+            <div class="err-msg" id="schedErr"></div>
+          </div>
+        </div>
+        <div class="col-lg-7">
+          <div class="cbox"><div class="ctitle"><i class="bi bi-list-ul"></i> Weekly Schedule</div><div id="schedList"></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BUDGET -->
+    <section class="section" id="budget">
+      <div class="topbar"><div><div class="ptitle">Budget Tracker</div><div class="psub">Log and monitor your income and expenses</div></div></div>
+      <div class="sgrid" style="grid-template-columns:repeat(3,1fr)">
+        <div class="sc c3"><div class="sico"><i class="bi bi-arrow-down-circle"></i></div><div class="slbl">Total Income</div><div class="sval" style="color:var(--accent4)" id="bIncome">₱0</div></div>
+        <div class="sc c4"><div class="sico"><i class="bi bi-arrow-up-circle"></i></div><div class="slbl">Total Expenses</div><div class="sval" style="color:var(--accent3)" id="bExpense">₱0</div></div>
+        <div class="sc c2"><div class="sico"><i class="bi bi-piggy-bank"></i></div><div class="slbl">Balance</div><div class="sval" style="color:var(--accent2)" id="bBalance">₱0</div></div>
+      </div>
+      <div class="row g-4">
+        <div class="col-lg-5">
+          <div class="cbox">
+            <div class="ctitle"><i class="bi bi-plus-circle"></i> Log Transaction</div>
+            <div class="form-group"><label class="lbl">Description</label><input class="inp" id="tx_desc" type="text" placeholder="e.g. Work salary, Lunch"/></div>
+            <div class="form-group"><label class="lbl">Amount (₱)</label><input class="inp" id="tx_amount" type="number" placeholder="0.00" min="0"/></div>
+            <div class="g2" style="margin-bottom:14px;">
+              <div><label class="lbl">Type</label><select class="inp" id="tx_type"><option value="income">Income</option><option value="expense">Expense</option></select></div>
+              <div><label class="lbl">Category</label><select class="inp" id="tx_cat"><option>Income</option><option>Tuition</option><option>Rent/Bills</option><option>Food</option><option>Transport</option><option>Others</option></select></div>
+            </div>
+            <div class="form-group"><label class="lbl">Date</label><input class="inp" id="tx_date" type="date"/></div>
+            <button class="btn-main" onclick="addTx()">Log Transaction</button>
+            <div class="err-msg" id="txErr"></div>
+          </div>
+        </div>
+        <div class="col-lg-7">
+          <div class="cbox"><div class="ctitle"><i class="bi bi-list-ul"></i> Transactions</div><div id="txList"></div></div>
+          <div class="cbox"><div class="ctitle"><i class="bi bi-bar-chart"></i> Spending vs Budget Limits</div><div id="budgetBars"></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- GRADES -->
+    <section class="section" id="grades">
+      <div class="topbar"><div><div class="ptitle">Academic Performance</div><div class="psub">Track your grades per subject and period</div></div></div>
+      <div class="sgrid" style="grid-template-columns:repeat(3,1fr)">
+        <div class="sc c3"><div class="sico"><i class="bi bi-award"></i></div><div class="slbl">Average Grade</div><div class="sval" style="color:var(--accent4)" id="gAvg">—</div><div class="ssub">Current semester</div></div>
+        <div class="sc c1"><div class="sico"><i class="bi bi-book"></i></div><div class="slbl">Subjects</div><div class="sval" style="color:var(--accent)" id="gSubj">0</div></div>
+        <div class="sc c4"><div class="sico"><i class="bi bi-exclamation-circle"></i></div><div class="slbl">At-Risk Subjects</div><div class="sval" style="color:var(--accent3)" id="gRisk">0</div><div class="ssub">Grade above 2.5</div></div>
+      </div>
+      <div class="row g-4">
+        <div class="col-lg-4">
+          <div class="cbox">
+            <div class="ctitle"><i class="bi bi-plus-circle"></i> Log Grade</div>
+            <div class="form-group"><label class="lbl">Subject</label><select class="inp" id="gr_subj"><option value="">Select subject...</option></select></div>
+            <div class="g2" style="margin-bottom:14px;">
+              <div><label class="lbl">Period</label><select class="inp" id="gr_period"><option>Prelim</option><option>Midterm</option><option>Pre-Final</option><option>Final</option></select></div>
+              <div><label class="lbl">Grade (1.00–5.00)</label><input class="inp" id="gr_val" type="number" step="0.25" min="1" max="5" placeholder="e.g. 1.75"/></div>
+            </div>
+            <button class="btn-main" onclick="addGrade()">Save Grade</button>
+            <div class="err-msg" id="gradeErr"></div>
+          </div>
+        </div>
+        <div class="col-lg-8">
+          <div class="cbox"><div class="ctitle"><i class="bi bi-table"></i> Grade Sheet</div><div id="gradeList"></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ALERTS -->
+    <section class="section" id="alerts">
+      <div class="topbar"><div><div class="ptitle">Alerts & Notifications</div><div class="psub">Auto-generated based on your data</div></div></div>
+      <div class="cbox"><div class="ctitle"><i class="bi bi-bell-fill" style="color:var(--accent3)"></i> Active Alerts</div><div id="alertList"></div></div>
+      <div class="cbox">
+        <div class="ctitle"><i class="bi bi-shield-check"></i> Risk Summary</div>
+        <div class="grow"><div class="growl"><span>Work-Life Balance</span><span id="rW">—</span></div><div class="pbar"><div class="pfill" id="rWB" style="width:0%"></div></div></div>
+        <div class="grow"><div class="growl"><span>Financial Health</span><span id="rF">—</span></div><div class="pbar"><div class="pfill" id="rFB" style="width:0%"></div></div></div>
+        <div class="grow"><div class="growl"><span>Academic Standing</span><span id="rA">—</span></div><div class="pbar"><div class="pfill" id="rAB" style="width:0%"></div></div></div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+// ── DATA ──
+const DB = { get: k => JSON.parse(localStorage.getItem(k)||'null'), set: (k,v) => localStorage.setItem(k,JSON.stringify(v)), del: k => localStorage.removeItem(k) };
+const getUser = () => DB.get('ws_u');
+const getD = () => DB.get('ws_d_'+(getUser()?.email||''))||{schedule:[],transactions:[],subjects:[],grades:{},profile:{}};
+const saveD = d => DB.set('ws_d_'+(getUser()?.email||''), d);
+
+// ── AUTH ──
+function switchTab(t) {
+  document.getElementById('loginForm').style.display = t==='login'?'block':'none';
+  document.getElementById('regForm').style.display = t==='register'?'block':'none';
+  document.getElementById('tabL').classList.toggle('active', t==='login');
+  document.getElementById('tabR').classList.toggle('active', t==='register');
+}
+function doRegister() {
+  const name=document.getElementById('rName').value.trim(), email=document.getElementById('rEmail').value.trim();
+  const pass=document.getElementById('rPass').value, pass2=document.getElementById('rPass2').value;
+  const err=document.getElementById('rErr');
+  if(!name||!email||!pass) return err.textContent='Fill in all fields.';
+  if(pass!==pass2) return err.textContent='Passwords do not match.';
+  if(pass.length<6) return err.textContent='Password must be at least 6 characters.';
+  const users=DB.get('ws_users')||{};
+  if(users[email]) return err.textContent='Email already registered.';
+  users[email]={name,email,pass}; DB.set('ws_users',users); DB.set('ws_u',{name,email}); err.textContent='';
+  startSetup();
+}
+function doLogin() {
+  const email=document.getElementById('lEmail').value.trim(), pass=document.getElementById('lPass').value;
+  const err=document.getElementById('lErr'), users=DB.get('ws_users')||{};
+  if(!users[email]||users[email].pass!==pass) return err.textContent='Invalid email or password.';
+  DB.set('ws_u',{name:users[email].name,email}); err.textContent='';
+  getD().profile?.school ? launchApp() : startSetup();
+}
+function doLogout() { DB.del('ws_u'); document.getElementById('appScreen').style.display='none'; document.getElementById('authScreen').style.display='flex'; }
+
+// ── SETUP ──
+let cStep=0;
+const setupScheds=[], setupSubjs=[];
+function startSetup() {
+  document.getElementById('authScreen').style.display='none';
+  document.getElementById('setupScreen').style.display='flex';
+  document.getElementById('tx_date').value=new Date().toISOString().split('T')[0];
+}
+function gotoStep(n) {
+  document.getElementById('st'+cStep).classList.remove('active');
+  document.getElementById('d'+cStep).classList.add('done');
+  cStep=n; document.getElementById('st'+n).classList.add('active');
+  document.getElementById('d'+n).classList.add('done');
+}
+function addSetupSched() {
+  const name=document.getElementById('ss_name').value.trim(), day=document.getElementById('ss_day').value;
+  const start=document.getElementById('ss_start').value, end=document.getElementById('ss_end').value, type=document.getElementById('ss_type').value;
+  if(!name||!start||!end) return alert('Fill in all fields.');
+  setupScheds.push({id:Date.now(),name,day,start,end,type});
+  renderDList('schedSetupList',setupScheds,removeSetupSched,i=>`<span class="tag ${i.type==='Class'?'tblue':'tyellow'}">${i.type}</span> ${i.day} ${i.start}–${i.end} — ${i.name}`);
+  document.getElementById('ss_name').value='';
+}
+function removeSetupSched(id) { setupScheds.splice(setupScheds.findIndex(x=>x.id===id),1); renderDList('schedSetupList',setupScheds,removeSetupSched,i=>`<span class="tag ${i.type==='Class'?'tblue':'tyellow'}">${i.type}</span> ${i.day} ${i.start}–${i.end} — ${i.name}`); }
+function addSetupSubject() {
+  const name=document.getElementById('sg_name').value.trim(), units=document.getElementById('sg_units').value||'3';
+  if(!name) return alert('Enter subject name.');
+  setupSubjs.push({id:Date.now(),name,units});
+  renderDList('subjSetupList',setupSubjs,removeSetupSubj,i=>`<span class="tag tblue">${i.units} units</span> ${i.name}`);
+  document.getElementById('sg_name').value='';
+}
+function removeSetupSubj(id) { setupSubjs.splice(setupSubjs.findIndex(x=>x.id===id),1); renderDList('subjSetupList',setupSubjs,removeSetupSubj,i=>`<span class="tag tblue">${i.units} units</span> ${i.name}`); }
+function renderDList(id,items,removeFn,labelFn) {
+  document.getElementById(id).innerHTML = items.map(i=>`<div class="ditem"><div class="dtxt">${labelFn(i)}</div><span class="drm" onclick="(window['${removeFn.name}']||${removeFn.name})(${i.id})"><i class="bi bi-x-circle"></i></span></div>`).join('');
+}
+window.removeSetupSched=removeSetupSched; window.removeSetupSubj=removeSetupSubj;
+function finishSetup() {
+  const d=getD();
+  d.profile={school:document.getElementById('p_school').value.trim()||'—',course:document.getElementById('p_course').value.trim()||'—',year:document.getElementById('p_year').value||'—',income:parseFloat(document.getElementById('p_income').value)||0,job:document.getElementById('p_job').value.trim()||'—',
+    budgetLimits:{Tuition:parseFloat(document.getElementById('bl_tuition').value)||0,'Rent/Bills':parseFloat(document.getElementById('bl_rent').value)||0,Food:parseFloat(document.getElementById('bl_food').value)||0,Transport:parseFloat(document.getElementById('bl_transport').value)||0,Others:parseFloat(document.getElementById('bl_others').value)||0},
+    maxWorkHours:parseFloat(document.getElementById('bl_maxhrs').value)||40};
+  d.schedule=setupScheds.map(x=>({...x})); d.subjects=setupSubjs.map(x=>({...x})); d.grades={};
+  saveD(d); document.getElementById('setupScreen').style.display='none'; launchApp();
+}
+
+// ── APP ──
+function launchApp() {
+  const u=getUser(), d=getD();
+  document.getElementById('appScreen').style.display='block';
+  document.getElementById('sName').textContent=u.name;
+  document.getElementById('sCourse').textContent=d.profile.course||'—';
+  document.getElementById('sAva').textContent=u.name.charAt(0).toUpperCase();
+  document.getElementById('tx_date').value=new Date().toISOString().split('T')[0];
+  renderAll();
+}
+function showSec(id,el) {
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nitem').forEach(n=>n.classList.remove('active'));
+  document.getElementById(id).classList.add('active'); el.classList.add('active'); renderAll();
+}
+function renderAll() { renderDash(); renderSchedList(); renderTxList(); renderGradeList(); renderAlerts(); }
+
+// ── SCHEDULE ──
+function addSched() {
+  const name=document.getElementById('ap_name').value.trim(), day=document.getElementById('ap_day').value;
+  const start=document.getElementById('ap_start').value, end=document.getElementById('ap_end').value, type=document.getElementById('ap_type').value;
+  const err=document.getElementById('schedErr');
+  if(!name||!start||!end) return err.textContent='Please fill in all fields.';
+  err.textContent=''; const d=getD();
+  d.schedule.push({id:Date.now(),name,day,start,end,type}); saveD(d); document.getElementById('ap_name').value=''; renderAll();
+}
+function delSched(id) { const d=getD(); d.schedule=d.schedule.filter(x=>x.id!==id); saveD(d); renderAll(); }
+window.delSched=delSched;
+function detectConflicts(sched) {
+  const ids=[], byDay={};
+  sched.forEach(s=>(byDay[s.day]=byDay[s.day]||[]).push(s));
+  Object.values(byDay).forEach(arr=>{
+    for(let i=0;i<arr.length;i++) for(let j=i+1;j<arr.length;j++)
+      if(arr[i].start<arr[j].end&&arr[j].start<arr[i].end) { if(!ids.includes(arr[i].id))ids.push(arr[i].id); if(!ids.includes(arr[j].id))ids.push(arr[j].id); }
+  }); return ids;
+}
+function renderSchedList() {
+  const d=getD(), el=document.getElementById('schedList');
+  if(!d.schedule.length){el.innerHTML='<div class="empty"><i class="bi bi-calendar3"></i>No entries yet.</div>';return;}
+  const order=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+  const sorted=[...d.schedule].sort((a,b)=>order.indexOf(a.day)-order.indexOf(b.day));
+  const conf=detectConflicts(d.schedule);
+  let h='<table class="tbl"><thead><tr><th>Day</th><th>Activity</th><th>Time</th><th>Type</th><th>Status</th><th></th></tr></thead><tbody>';
+  sorted.forEach(s=>{
+    const isC=conf.includes(s.id), tag=s.type==='Class'?'tblue':'tyellow';
+    h+=`<tr><td>${s.day}</td><td>${s.name}</td><td>${s.start}–${s.end}</td><td><span class="tag ${tag}">${s.type}</span></td><td>${isC?'<span class="tag tred">⚠ Conflict</span>':'<span class="tag tgreen">OK</span>'}</td><td><button class="dsm" onclick="delSched(${s.id})"><i class="bi bi-trash"></i></button></td></tr>`;
+  });
+  el.innerHTML=h+'</tbody></table>';
+}
+
+// ── BUDGET ──
+function addTx() {
+  const desc=document.getElementById('tx_desc').value.trim(), amount=parseFloat(document.getElementById('tx_amount').value);
+  const type=document.getElementById('tx_type').value, cat=document.getElementById('tx_cat').value, date=document.getElementById('tx_date').value;
+  const err=document.getElementById('txErr');
+  if(!desc||!amount||amount<=0) return err.textContent='Please fill in all fields correctly.';
+  err.textContent=''; const d=getD();
+  d.transactions.push({id:Date.now(),desc,amount,type,cat,date}); saveD(d);
+  document.getElementById('tx_desc').value=''; document.getElementById('tx_amount').value=''; renderAll();
+}
+function delTx(id) { const d=getD(); d.transactions=d.transactions.filter(x=>x.id!==id); saveD(d); renderAll(); }
+window.delTx=delTx;
+function renderTxList() {
+  const d=getD();
+  let inc=0,exp=0;
+  d.transactions.forEach(t=>t.type==='income'?inc+=t.amount:exp+=t.amount);
+  document.getElementById('bIncome').textContent='₱'+inc.toLocaleString();
+  document.getElementById('bExpense').textContent='₱'+exp.toLocaleString();
+  const bal=inc-exp;
+  document.getElementById('bBalance').textContent=(bal<0?'-₱':'₱')+Math.abs(bal).toLocaleString();
+  const el=document.getElementById('txList');
+  if(!d.transactions.length){el.innerHTML='<div class="empty"><i class="bi bi-wallet2"></i>No transactions yet.</div>';document.getElementById('budgetBars').innerHTML='<div class="empty"><i class="bi bi-bar-chart"></i>No data yet.</div>';return;}
+  const sorted=[...d.transactions].sort((a,b)=>new Date(b.date)-new Date(a.date));
+  let h='<table class="tbl"><thead><tr><th>Date</th><th>Description</th><th>Category</th><th>Amount</th><th></th></tr></thead><tbody>';
+  sorted.forEach(t=>{
+    const isIn=t.type==='income', col=isIn?'var(--accent4)':'var(--accent3)', sign=isIn?'+':'-', tag=isIn?'tgreen':'tred';
+    h+=`<tr><td>${t.date}</td><td>${t.desc}</td><td><span class="tag ${tag}">${t.cat}</span></td><td style="color:${col};font-weight:700">${sign}₱${t.amount.toLocaleString()}</td><td><button class="dsm" onclick="delTx(${t.id})"><i class="bi bi-trash"></i></button></td></tr>`;
+  });
+  el.innerHTML=h+'</tbody></table>';
+  // budget bars
+  const limits=d.profile.budgetLimits||{}, spent={};
+  d.transactions.filter(t=>t.type==='expense').forEach(t=>spent[t.cat]=(spent[t.cat]||0)+t.amount);
+  const cats=['Tuition','Rent/Bills','Food','Transport','Others'], cols=['var(--accent)','var(--accent2)','var(--accent4)','var(--accent3)','var(--muted)'];
+  let bars='';
+  cats.forEach((c,i)=>{
+    const s=spent[c]||0, lim=limits[c]||0; if(s===0&&lim===0) return;
+    const pct=lim>0?Math.min(100,(s/lim)*100):0, over=lim>0&&s>lim;
+    bars+=`<div class="grow"><div class="growl"><span>${c}</span><span style="color:${over?'var(--accent3)':cols[i]}">${over?'⚠ ':''}₱${s.toLocaleString()}${lim?' / ₱'+lim.toLocaleString():''}</span></div><div class="pbar"><div class="pfill" style="width:${pct}%;background:${over?'var(--accent3)':cols[i]}"></div></div></div>`;
+  });
+  document.getElementById('budgetBars').innerHTML=bars||'<div class="empty"><i class="bi bi-bar-chart"></i>No expense data yet.</div>';
+}
+
+// ── GRADES ──
+function addGrade() {
+  const subj=document.getElementById('gr_subj').value, period=document.getElementById('gr_period').value;
+  const val=parseFloat(document.getElementById('gr_val').value);
+  const err=document.getElementById('gradeErr');
+  if(!subj) return err.textContent='Select a subject.';
+  if(!val||val<1||val>5) return err.textContent='Grade must be between 1.00 and 5.00.';
+  err.textContent=''; const d=getD();
+  if(!d.grades[subj]) d.grades[subj]={};
+  d.grades[subj][period]=val; saveD(d); document.getElementById('gr_val').value=''; renderAll();
+}
+const PERIODS=['Prelim','Midterm','Pre-Final','Final'];
+function renderGradeList() {
+  const d=getD(), sel=document.getElementById('gr_subj');
+  sel.innerHTML='<option value="">Select subject...</option>';
+  d.subjects.forEach(s=>sel.innerHTML+=`<option value="${s.name}">${s.name}</option>`);
+  const el=document.getElementById('gradeList');
+  if(!d.subjects.length){el.innerHTML='<div class="empty"><i class="bi bi-mortarboard"></i>No subjects added. Please complete setup again or contact support.</div>';document.getElementById('gAvg').textContent='—';document.getElementById('gSubj').textContent='0';document.getElementById('gRisk').textContent='0';return;}
+  let h='<table class="tbl"><thead><tr><th>Subject</th><th>Units</th>'+PERIODS.map(p=>`<th>${p}</th>`).join('')+'<th>Avg</th><th>Status</th></tr></thead><tbody>';
+  let tg=0,gc=0,risk=0;
+  d.subjects.forEach(s=>{
+    const g=d.grades[s.name]||{}, vals=PERIODS.map(p=>g[p]).filter(Boolean);
+    const avg=vals.length?(vals.reduce((a,b)=>a+b,0)/vals.length).toFixed(2):null;
+    if(avg){tg+=parseFloat(avg);gc++;}
+    if(avg&&parseFloat(avg)>2.5) risk++;
+    const st=!avg?'<span class="tag tblue">No grade</span>':parseFloat(avg)<=2?'<span class="tag tgreen">Passing</span>':parseFloat(avg)<=2.5?'<span class="tag tyellow">Watch</span>':'<span class="tag tred">At Risk</span>';
+    h+=`<tr><td>${s.name}</td><td>${s.units}</td>${PERIODS.map(p=>`<td>${g[p]||'—'}</td>`).join('')}<td><strong>${avg||'—'}</strong></td><td>${st}</td></tr>`;
+  });
+  el.innerHTML=h+'</tbody></table>';
+  document.getElementById('gAvg').textContent=gc?(tg/gc).toFixed(2):'—';
+  document.getElementById('gSubj').textContent=d.subjects.length;
+  document.getElementById('gRisk').textContent=risk;
+}
+
+// ── DASHBOARD ──
+function renderDash() {
+  const u=getUser(), d=getD(), now=new Date();
+  const hr=now.getHours(), greet=hr<12?'Good morning':hr<17?'Good afternoon':'Good evening';
+  document.getElementById('dGreet').textContent=`${greet}, ${u.name} 👋`;
+  document.getElementById('dDate').textContent=now.toLocaleDateString('en-PH',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  // work hours
+  const workE=d.schedule.filter(s=>s.type==='Work');
+  const wMins=workE.reduce((t,s)=>{const[sh,sm]=s.start.split(':').map(Number),[eh,em]=s.end.split(':').map(Number);return t+(eh*60+em-sh*60-sm);},0);
+  const wHrs=(wMins/60).toFixed(1), maxH=d.profile.maxWorkHours||40;
+  document.getElementById('dWork').textContent=wHrs+'h';
+  document.getElementById('dWorkSub').textContent=`Limit: ${maxH}h/week`;
+  // balance
+  let inc=0,exp=0; d.transactions.forEach(t=>t.type==='income'?inc+=t.amount:exp+=t.amount);
+  const bal=inc-exp;
+  document.getElementById('dBal').textContent='₱'+bal.toLocaleString();
+  document.getElementById('dBalSub').textContent=`Income: ₱${inc.toLocaleString()}`;
+  // gpa
+  let tg=0,gc=0;
+  d.subjects.forEach(s=>{const g=d.grades[s.name]||{},vals=PERIODS.map(p=>g[p]).filter(Boolean);if(vals.length){tg+=vals.reduce((a,b)=>a+b,0)/vals.length;gc++;}});
+  const avg=gc?(tg/gc).toFixed(2):'—';
+  document.getElementById('dGPA').textContent=avg;
+  document.getElementById('dGPASub').textContent=gc?`${gc} subjects with grades`:'No grades yet';
+  // conflicts
+  document.getElementById('dConf').textContent=Math.floor(detectConflicts(d.schedule).length/2);
+  // today's sched
+  const dayName=now.toLocaleDateString('en-PH',{weekday:'long'});
+  const todayE=d.schedule.filter(s=>s.day===dayName);
+  const te=document.getElementById('dTodaySched');
+  if(!todayE.length){te.innerHTML='<div class="empty"><i class="bi bi-calendar3"></i>No entries for today.</div>';}
+  else{let h='<table class="tbl"><thead><tr><th>Time</th><th>Activity</th><th>Type</th></tr></thead><tbody>';todayE.forEach(s=>{h+=`<tr><td>${s.start}–${s.end}</td><td>${s.name}</td><td><span class="tag ${s.type==='Class'?'tblue':'tyellow'}">${s.type}</span></td></tr>`;});te.innerHTML=h+'</tbody></table>';}
+  // grades overview
+  const ge=document.getElementById('dGrades');
+  if(!d.subjects.length){ge.innerHTML='<div class="empty"><i class="bi bi-mortarboard"></i>No grades yet.</div>';}
+  else{let h='';d.subjects.slice(0,5).forEach(s=>{const g=d.grades[s.name]||{},vals=PERIODS.map(p=>g[p]).filter(Boolean),a=vals.length?(vals.reduce((x,y)=>x+y,0)/vals.length).toFixed(2):null;const pct=a?Math.max(0,Math.min(100,((5-parseFloat(a))/4)*100)):0,col=!a?'var(--muted)':parseFloat(a)<=2?'var(--accent4)':parseFloat(a)<=2.5?'var(--accent)':'var(--accent3)';h+=`<div class="grow"><div class="growl"><span>${s.name}</span><span style="color:${col}">${a||'No grade'}</span></div><div class="pbar"><div class="pfill" style="width:${pct}%;background:${col}"></div></div></div>`;});ge.innerHTML=h;}
+  // budget overview
+  const be=document.getElementById('dBudget');
+  if(!d.transactions.length){be.innerHTML='<div class="empty"><i class="bi bi-wallet2"></i>No transactions yet.</div>';}
+  else{be.innerHTML=`<div class="row text-center"><div class="col-4"><div style="font-size:0.7rem;color:var(--muted);margin-bottom:4px">Income</div><div style="font-family:Syne;font-weight:800;color:var(--accent4)">₱${inc.toLocaleString()}</div></div><div class="col-4"><div style="font-size:0.7rem;color:var(--muted);margin-bottom:4px">Expenses</div><div style="font-family:Syne;font-weight:800;color:var(--accent3)">₱${exp.toLocaleString()}</div></div><div class="col-4"><div style="font-size:0.7rem;color:var(--muted);margin-bottom:4px">Balance</div><div style="font-family:Syne;font-weight:800;color:var(--accent2)">₱${bal.toLocaleString()}</div></div></div>`;}
+}
+
+// ── ALERTS ──
+function renderAlerts() {
+  const d=getD(); const alerts=[];
+  const wMins=d.schedule.filter(s=>s.type==='Work').reduce((t,s)=>{const[sh,sm]=s.start.split(':').map(Number),[eh,em]=s.end.split(':').map(Number);return t+(eh*60+em-sh*60-sm);},0);
+  const wHrs=wMins/60, maxH=d.profile.maxWorkHours||40;
+  if(wHrs>maxH) alerts.push({c:'var(--accent3)',t:`<strong>⚠ Work Overload:</strong> You have ${wHrs.toFixed(1)}h/week scheduled — over your ${maxH}h limit.`});
+  const conf=detectConflicts(d.schedule);
+  if(conf.length) alerts.push({c:'var(--accent)',t:`<strong>⚠ Schedule Conflict:</strong> ${Math.floor(conf.length/2)} work-class overlap(s) detected.`});
+  const limits=d.profile.budgetLimits||{}, spent={};
+  d.transactions.filter(t=>t.type==='expense').forEach(t=>spent[t.cat]=(spent[t.cat]||0)+t.amount);
+  Object.entries(limits).forEach(([cat,lim])=>{if(lim>0&&(spent[cat]||0)>lim) alerts.push({c:'var(--accent3)',t:`<strong>💸 Over Budget:</strong> ${cat} (₱${(spent[cat]).toLocaleString()}) exceeds limit of ₱${lim.toLocaleString()}.`});});
+  let inc=0,exp=0; d.transactions.forEach(t=>t.type==='income'?inc+=t.amount:exp+=t.amount);
+  if(d.transactions.length&&(inc-exp)<500) alerts.push({c:'var(--accent3)',t:`<strong>💸 Low Balance:</strong> Your balance is ₱${(inc-exp).toLocaleString()}. Be careful with spending.`});
+  d.subjects.forEach(s=>{const g=d.grades[s.name]||{},vals=PERIODS.map(p=>g[p]).filter(Boolean),a=vals.length?vals.reduce((x,y)=>x+y,0)/vals.length:null;if(a&&a>2.5) alerts.push({c:'var(--accent)',t:`<strong>📚 At-Risk:</strong> ${s.name} — average ${a.toFixed(2)}. Reduce work hours during exams.`});});
+  // badge
+  const badge=document.getElementById('abadge');
+  badge.style.display=alerts.length?'inline-block':'none'; badge.textContent=alerts.length;
+  // list
+  const el=document.getElementById('alertList');
+  const dashAl=document.getElementById('dAlerts');
+  if(!alerts.length){
+    el.innerHTML='<div class="empty"><i class="bi bi-bell"></i>No alerts. Everything looks good! 🎉</div>';
+    if(dashAl) dashAl.innerHTML='<div class="empty"><i class="bi bi-bell"></i>No alerts right now.</div>';
+    document.getElementById('rBanner').style.display='none';
+  } else {
+    let h=alerts.map(a=>`<div class="aitem"><div class="adot" style="background:${a.c}"></div><div><p>${a.t}</p><small>System Alert</small></div></div>`).join('');
+    el.innerHTML=h; if(dashAl) dashAl.innerHTML=h;
+    document.getElementById('rBanner').style.display='flex'; document.getElementById('rBannerTxt').innerHTML=alerts[0].t;
+  }
+  // risk bars
+  const wRisk=Math.min(100,(wHrs/maxH)*100);
+  const fRisk=inc>0?Math.min(100,(exp/inc)*100):0;
+  const aRisk=d.subjects.length?Math.min(100,(d.subjects.filter(s=>{const g=d.grades[s.name]||{},v=PERIODS.map(p=>g[p]).filter(Boolean),a=v.length?v.reduce((x,y)=>x+y,0)/v.length:null;return a&&a>2.5;}).length/d.subjects.length)*100):0;
+  function setR(id,bid,pct){const el2=document.getElementById(id),bar=document.getElementById(bid);el2.textContent=pct>70?'High Risk':pct>40?'Moderate':'Stable';el2.style.color=pct>70?'var(--accent3)':pct>40?'var(--accent)':'var(--accent4)';bar.style.width=pct+'%';bar.style.background=pct>70?'var(--accent3)':pct>40?'var(--accent)':'var(--accent4)';}
+  setR('rW','rWB',wRisk); setR('rF','rFB',fRisk); setR('rA','rAB',aRisk);
+}
+
+// ── INIT ──
+window.onload=()=>{
+  const u=getUser();
+  if(!u){document.getElementById('authScreen').style.display='flex';}
+  else{getD().profile?.school?launchApp():startSetup();}
+};
+</script>
+</body>
+</html>

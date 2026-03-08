@@ -634,7 +634,6 @@ function addSetupSched(){
   const days=getSelDays('ss_days');
   const start=document.getElementById('ss_start').value,end=document.getElementById('ss_end').value,type=document.getElementById('ss_type').value;
   if(!name||!days.length||!start||!end) return alert('Fill in all fields and select at least one day.');
-  if(end<=start) return alert('End time must be after start time.');
   setupScheds.push({id:Date.now(),name,days,start,end,type});
   renderDList('schedSetupList',setupScheds,removeSetupSched,i=>`<span class="tag ${i.type==='Class'?'tblue':'tyellow'}">${i.type}</span> <span class="tag tblue">${fmtDays(i.days)}</span> ${i.start}–${i.end} — ${i.name}`);
   document.getElementById('ss_name').value='';
@@ -699,7 +698,6 @@ function addSched(){
   const start=document.getElementById('ap_start').value,end=document.getElementById('ap_end').value,type=document.getElementById('ap_type').value;
   const err=document.getElementById('schedErr');
   if(!name||!days.length||!start||!end) return err.textContent='Fill in all fields and select at least one day.';
-  if(end<=start) return err.textContent='End time must be after start time.';
   err.textContent=''; const d=getD();
   d.schedule.push({id:Date.now(),name,days,start,end,type}); saveD(d);
   document.getElementById('ap_name').value=''; setSelDays('ap_days',[]); renderAll();
@@ -961,7 +959,7 @@ function renderDash(){
   const hr=now.getHours(),greet=hr<12?'Good morning':hr<17?'Good afternoon':'Good evening';
   document.getElementById('dGreet').textContent=`${greet}, ${u.name} 👋`;
   document.getElementById('dDate').textContent=now.toLocaleDateString('en-PH',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
-  const wMins=d.schedule.filter(s=>s.type==='Work').reduce((t,s)=>{const[sh,sm]=s.start.split(':').map(Number),[eh,em]=s.end.split(':').map(Number);return t+Math.max(0,eh*60+em-sh*60-sm)*getDays(s).length;},0);
+  const wMins=d.schedule.filter(s=>s.type==='Work').reduce((t,s)=>{const[sh,sm]=s.start.split(':').map(Number),[eh,em]=s.end.split(':').map(Number);return t+(()=>{const sm2=sh*60+sm,em2=eh*60+em;return(em2>=sm2?em2-sm2:em2+1440-sm2);})()*getDays(s).length;},0);
   const wHrs=(wMins/60).toFixed(1),maxH=d.profile.maxWorkHours||40;
   const wOver=parseFloat(wHrs)>maxH;
   document.getElementById('dWork').textContent=wHrs+'h';
@@ -997,7 +995,7 @@ function renderDash(){
 // ── ALERTS ──
 function renderAlerts(){
   const d=getD(),alerts=[];
-  const wMins=d.schedule.filter(s=>s.type==='Work').reduce((t,s)=>{const[sh,sm]=s.start.split(':').map(Number),[eh,em]=s.end.split(':').map(Number);return t+Math.max(0,eh*60+em-sh*60-sm)*getDays(s).length;},0);
+  const wMins=d.schedule.filter(s=>s.type==='Work').reduce((t,s)=>{const[sh,sm]=s.start.split(':').map(Number),[eh,em]=s.end.split(':').map(Number);return t+(()=>{const sm2=sh*60+sm,em2=eh*60+em;return(em2>=sm2?em2-sm2:em2+1440-sm2);})()*getDays(s).length;},0);
   const wHrs=wMins/60,maxH=d.profile.maxWorkHours||40;
   if(wHrs>maxH) alerts.push({c:'var(--accent3)',t:`<strong>⚠ Work Overload:</strong> ${wHrs.toFixed(1)}h/week scheduled — over your ${maxH}h limit.`});
   const conf=detectConflicts(d.schedule);
@@ -1055,7 +1053,6 @@ function saveSchedEdit(){
   const start=document.getElementById('edit_sched_start').value;
   const end=document.getElementById('edit_sched_end').value;
   if(!name||!days.length||!start||!end)return alert('Fill in all fields and select at least one day.');
-  if(end<=start)return alert('End time must be after start time.');;
   const d=getD();const idx=d.schedule.findIndex(x=>x.id===id);
   if(idx>-1){d.schedule[idx]={id,name,days,type,start,end};saveD(d);}
   closeModal('schedModal');renderAll();

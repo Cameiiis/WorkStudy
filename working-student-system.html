@@ -63,7 +63,23 @@
     .ditem .drm{color:var(--accent3);cursor:pointer;padding:4px;}
     .bsm{background:var(--accent);color:#0d0f14;border:none;border-radius:8px;padding:8px 16px;font-size:0.8rem;font-weight:700;font-family:'Space Grotesk',sans-serif;cursor:pointer;white-space:nowrap;}
     .dsm{background:rgba(255,107,107,0.1);color:var(--accent3);border:1px solid rgba(255,107,107,0.2);border-radius:7px;padding:5px 10px;font-size:0.75rem;cursor:pointer;}
+    .esm{background:rgba(91,140,255,0.1);color:var(--accent2);border:1px solid rgba(91,140,255,0.2);border-radius:7px;padding:5px 10px;font-size:0.75rem;cursor:pointer;margin-right:4px;}
+    /* MODAL */
+    .modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:999;align-items:center;justify-content:center;padding:16px;}
+    .modal-bg.open{display:flex;}
+    .modal-box{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:28px 24px;width:100%;max-width:480px;max-height:90vh;overflow-y:auto;animation:fadeIn 0.2s ease;}
+    .modal-title{font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:800;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;}
+    .modal-close{background:none;border:none;color:var(--muted);font-size:1.3rem;cursor:pointer;line-height:1;padding:0;}
+    .modal-close:hover{color:var(--accent3);}
     @keyframes fadeIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+    /* DAY PICKER */
+    .day-picker{display:flex;flex-wrap:wrap;gap:6px;}
+    .dp{padding:7px 12px;border-radius:8px;font-size:0.78rem;font-weight:700;cursor:pointer;border:1px solid var(--border);color:var(--muted);transition:all 0.15s;user-select:none;font-family:'Space Grotesk',sans-serif;}
+    .dp.sel{background:var(--accent);color:#0d0f14;border-color:var(--accent);}
+    .dp:hover:not(.sel){color:var(--text);border-color:rgba(255,255,255,0.2);}
+    /* SCALE TOGGLE */
+    .scale-btn{padding:5px 10px;border-radius:6px;font-size:0.73rem;font-weight:700;cursor:pointer;color:var(--muted);font-family:'Space Grotesk',sans-serif;transition:all 0.15s;user-select:none;}
+    .scale-btn.active{background:var(--accent2);color:#fff;}
 
     /* ── AUTH ── */
     #authScreen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px;
@@ -327,7 +343,10 @@
         <div class="ctitle"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/><path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/></svg> Add Entry</div>
         <div class="form-group"><label class="lbl">Activity / Subject</label><input class="inp" id="ap_name" type="text" placeholder="e.g. Database Management or Work Shift"/></div>
         <div class="g2">
-          <div class="form-group"><label class="lbl">Day</label><select class="inp" id="ap_day"><option>Monday</option><option>Tuesday</option><option>Wednesday</option><option>Thursday</option><option>Friday</option><option>Saturday</option><option>Sunday</option></select></div>
+          <div class="form-group" style="grid-column:1/-1"><label class="lbl">Days</label>
+            <div class="day-picker" id="ap_days">
+              <span class="dp" data-day="Mon">Mon</span><span class="dp" data-day="Tue">Tue</span><span class="dp" data-day="Wed">Wed</span><span class="dp" data-day="Thu">Thu</span><span class="dp" data-day="Fri">Fri</span><span class="dp" data-day="Sat">Sat</span><span class="dp" data-day="Sun">Sun</span>
+            </div></div>
           <div class="form-group"><label class="lbl">Type</label><select class="inp" id="ap_type"><option>Class</option><option>Work</option></select></div>
           <div class="form-group"><label class="lbl">Start Time</label><input class="inp" id="ap_start" type="time"/></div>
           <div class="form-group"><label class="lbl">End Time</label><input class="inp" id="ap_end" type="time"/></div>
@@ -364,7 +383,16 @@
 
     <!-- GRADES -->
     <section class="section" id="grades">
-      <div class="topbar"><div><div class="ptitle">Grades</div><div class="psub">Track academic performance</div></div></div>
+      <div class="topbar">
+        <div><div class="ptitle">Grades</div><div class="psub">Track academic performance</div></div>
+        <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
+          <span style="font-size:0.75rem;color:var(--muted);font-weight:600;">Scale:</span>
+          <div style="display:flex;background:rgba(255,255,255,0.04);border-radius:8px;padding:3px;gap:2px;">
+            <div class="scale-btn active" id="scale_uls" onclick="setScale('1-5')" title="1.00 Highest, 5.00 Lowest (Philippine system)">1–5</div>
+            <div class="scale-btn" id="scale_14" onclick="setScale('4-1')" title="4.00 Highest, 1.00 Lowest (GPA system)">4–1</div>
+          </div>
+        </div>
+      </div>
       <div class="sgrid" style="grid-template-columns:repeat(3,1fr);">
         <div class="sc c3"><div class="sico"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16"><path d="M9.669.864 8 0 6.331.864l-1.858.282-.842 1.68-1.337 1.32L2.6 6l-.306 1.854 1.337 1.32.842 1.68 1.858.282L8 12l1.669-.864 1.858-.282.842-1.68 1.337-1.32L13.4 6l.306-1.854-1.337-1.32-.842-1.68zm1.196 1.193.684 1.365 1.086 1.072L12.387 6l.248 1.506-1.086 1.072-.684 1.365-1.51.229L8 10.874l-1.355-.702-1.51-.229-.684-1.365-1.086-1.072L3.614 6l-.25-1.506 1.087-1.072.684-1.365 1.51-.229L8 1.126l1.356.702z"/><path d="M4 11.794V16l4-1 4 1v-4.206l-2.018.306L8 13.126 6.018 12.1z"/></svg></div><div class="slbl">Avg Grade</div><div class="sval" style="color:var(--accent4)" id="gAvg">—</div></div>
         <div class="sc c1"><div class="sico"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16"><path d="M1 2.828c.885-.37 2.154-.769 3.388-.893 1.33-.134 2.458.063 3.112.752v9.746c-.935-.53-2.12-.603-3.213-.493-1.18.12-2.37.461-3.287.811zm7.5-.141c.654-.689 1.782-.886 3.112-.752 1.234.124 2.503.523 3.388.893v9.923c-.918-.35-2.107-.692-3.287-.81-1.094-.111-2.278-.039-3.213.492zM8 1.783C7.015.936 5.587.81 4.287.94c-1.514.153-3.042.672-3.994 1.105A.5.5 0 0 0 0 2.5v11a.5.5 0 0 0 .707.455c.882-.4 2.303-.881 3.68-1.02 1.409-.142 2.59.087 3.223.877a.5.5 0 0 0 .78 0c.633-.79 1.814-1.019 3.222-.877 1.378.139 2.8.62 3.681 1.02A.5.5 0 0 0 16 13.5v-11a.5.5 0 0 0-.293-.455c-.952-.433-2.48-.952-3.994-1.105C10.413.809 8.985.936 8 1.783"/></svg></div><div class="slbl">Subjects</div><div class="sval" style="color:var(--accent)" id="gSubj">0</div></div>
@@ -375,7 +403,7 @@
         <div class="form-group"><label class="lbl">Subject</label><select class="inp" id="gr_subj"><option value="">Select subject...</option></select></div>
         <div class="g2">
           <div class="form-group"><label class="lbl">Period</label><select class="inp" id="gr_period"><option>Prelim</option><option>Midterm</option><option>Pre-Final</option><option>Final</option></select></div>
-          <div class="form-group"><label class="lbl">Grade (1.00–5.00)</label><input class="inp" id="gr_val" type="number" inputmode="decimal" step="0.25" min="1" max="5" placeholder="e.g. 1.75"/></div>
+          <div class="form-group"><label class="lbl" id="gr_val_lbl">Grade (1.00 = Highest)</label><input class="inp" id="gr_val" type="number" inputmode="decimal" step="0.25" min="1" max="5" placeholder="e.g. 1.75"/></div>
         </div>
         <button class="btn-main" onclick="addGrade()">Save Grade</button>
         <div class="err-msg" id="gradeErr"></div>
@@ -396,6 +424,68 @@
     </section>
 
   </main>
+</div>
+
+
+<!-- ═══ EDIT MODALS ═══ -->
+<!-- Schedule Edit Modal -->
+<div class="modal-bg" id="schedModal">
+  <div class="modal-box">
+    <div class="modal-title">Edit Schedule Entry <button class="modal-close" onclick="closeModal('schedModal')">✕</button></div>
+    <input type="hidden" id="edit_sched_id"/>
+    <div class="form-group"><label class="lbl">Activity / Subject</label><input class="inp" id="edit_sched_name" type="text"/></div>
+    <div class="form-group"><label class="lbl">Days</label>
+        <div class="day-picker" id="edit_sched_days">
+          <span class="dp" data-day="Mon">Mon</span><span class="dp" data-day="Tue">Tue</span><span class="dp" data-day="Wed">Wed</span><span class="dp" data-day="Thu">Thu</span><span class="dp" data-day="Fri">Fri</span><span class="dp" data-day="Sat">Sat</span><span class="dp" data-day="Sun">Sun</span>
+        </div></div>
+    <div class="g2">
+      <div class="form-group" style="display:none"><label class="lbl">Day (hidden)</label>
+        <select class="inp" id="edit_sched_day"></select></div>
+      <div class="form-group"><label class="lbl">Type</label>
+        <select class="inp" id="edit_sched_type"><option>Class</option><option>Work</option></select></div>
+      <div class="form-group"><label class="lbl">Start Time</label><input class="inp" id="edit_sched_start" type="time"/></div>
+      <div class="form-group"><label class="lbl">End Time</label><input class="inp" id="edit_sched_end" type="time"/></div>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:6px;">
+      <button class="btn-out" style="flex:1" onclick="closeModal('schedModal')">Cancel</button>
+      <button class="btn-main" style="flex:2;margin-top:0" onclick="saveSchedEdit()">Save Changes</button>
+    </div>
+  </div>
+</div>
+<!-- Budget Edit Modal -->
+<div class="modal-bg" id="txModal">
+  <div class="modal-box">
+    <div class="modal-title">Edit Transaction <button class="modal-close" onclick="closeModal('txModal')">✕</button></div>
+    <input type="hidden" id="edit_tx_id"/>
+    <div class="form-group"><label class="lbl">Description</label><input class="inp" id="edit_tx_desc" type="text"/></div>
+    <div class="form-group"><label class="lbl">Amount (₱)</label><input class="inp" id="edit_tx_amount" type="number" inputmode="decimal" min="0"/></div>
+    <div class="g2">
+      <div class="form-group"><label class="lbl">Type</label>
+        <select class="inp" id="edit_tx_type"><option value="income">Income</option><option value="expense">Expense</option></select></div>
+      <div class="form-group"><label class="lbl">Category</label>
+        <select class="inp" id="edit_tx_cat"><option>Income</option><option>Tuition</option><option>Rent/Bills</option><option>Food</option><option>Transport</option><option>Others</option></select></div>
+    </div>
+    <div class="form-group"><label class="lbl">Date</label><input class="inp" id="edit_tx_date" type="date"/></div>
+    <div style="display:flex;gap:10px;margin-top:6px;">
+      <button class="btn-out" style="flex:1" onclick="closeModal('txModal')">Cancel</button>
+      <button class="btn-main" style="flex:2;margin-top:0" onclick="saveTxEdit()">Save Changes</button>
+    </div>
+  </div>
+</div>
+<!-- Grade Edit Modal -->
+<div class="modal-bg" id="gradeModal">
+  <div class="modal-box">
+    <div class="modal-title">Edit Grade <button class="modal-close" onclick="closeModal('gradeModal')">✕</button></div>
+    <input type="hidden" id="edit_grade_subj"/>
+    <input type="hidden" id="edit_grade_period"/>
+    <div class="form-group"><label class="lbl">Subject</label><input class="inp" id="edit_grade_subj_display" type="text" readonly style="opacity:0.6;cursor:not-allowed;"/></div>
+    <div class="form-group"><label class="lbl">Period</label><input class="inp" id="edit_grade_period_display" type="text" readonly style="opacity:0.6;cursor:not-allowed;"/></div>
+    <div class="form-group"><label class="lbl" id="edit_gr_lbl">Grade (1.00 = Highest)</label><input class="inp" id="edit_grade_val" type="number" inputmode="decimal" step="0.25" min="1" max="5" placeholder="e.g. 1.75"/></div>
+    <div style="display:flex;gap:10px;margin-top:6px;">
+      <button class="btn-out" style="flex:1" onclick="closeModal('gradeModal')">Cancel</button>
+      <button class="btn-main" style="flex:2;margin-top:0" onclick="saveGradeEdit()">Save Changes</button>
+    </div>
+  </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
@@ -453,15 +543,29 @@ function gotoStep(n){
   document.getElementById('d'+n).classList.add('done');
   document.getElementById('setupScreen').scrollTop=0;
 }
-function addSetupSched(){
-  const name=document.getElementById('ss_name').value.trim(),day=document.getElementById('ss_day').value;
-  const start=document.getElementById('ss_start').value,end=document.getElementById('ss_end').value,type=document.getElementById('ss_type').value;
-  if(!name||!start||!end) return alert('Fill in all fields.');
-  setupScheds.push({id:Date.now(),name,day,start,end,type});
-  renderDList('schedSetupList',setupScheds,removeSetupSched,i=>`<span class="tag ${i.type==='Class'?'tblue':'tyellow'}">${i.type}</span> ${i.day} ${i.start}–${i.end} — ${i.name}`);
-  document.getElementById('ss_name').value='';
+function getSelDays(pickerId){return [...document.querySelectorAll('#'+pickerId+' .dp.sel')].map(d=>d.dataset.day);}
+function setSelDays(pickerId,days){
+  document.querySelectorAll('#'+pickerId+' .dp').forEach(d=>{d.classList.toggle('sel',days.includes(d.dataset.day));});
 }
-function removeSetupSched(id){setupScheds.splice(setupScheds.findIndex(x=>x.id===id),1);renderDList('schedSetupList',setupScheds,removeSetupSched,i=>`<span class="tag ${i.type==='Class'?'tblue':'tyellow'}">${i.type}</span> ${i.day} ${i.start}–${i.end} — ${i.name}`);}
+// Init day pickers click toggle
+document.addEventListener('click',e=>{if(e.target.classList.contains('dp'))e.target.classList.toggle('sel');});
+function fmtDays(days){
+  const order=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  const sorted=days.slice().sort((a,b)=>order.indexOf(a)-order.indexOf(b));
+  // abbreviate runs: Mon,Wed,Fri or Mon-Wed
+  return sorted.join(', ');
+}
+function addSetupSched(){
+  const name=document.getElementById('ss_name').value.trim();
+  const days=getSelDays('ss_days');
+  const start=document.getElementById('ss_start').value,end=document.getElementById('ss_end').value,type=document.getElementById('ss_type').value;
+  if(!name||!days.length||!start||!end) return alert('Fill in all fields and select at least one day.');
+  setupScheds.push({id:Date.now(),name,days,start,end,type});
+  renderDList('schedSetupList',setupScheds,removeSetupSched,i=>`<span class="tag ${i.type==='Class'?'tblue':'tyellow'}">${i.type}</span> <span class="tag tblue">${fmtDays(i.days)}</span> ${i.start}–${i.end} — ${i.name}`);
+  document.getElementById('ss_name').value='';
+  setSelDays('ss_days',[]);
+}
+function removeSetupSched(id){setupScheds.splice(setupScheds.findIndex(x=>x.id===id),1);renderDList('schedSetupList',setupScheds,removeSetupSched,i=>`<span class="tag ${i.type==='Class'?'tblue':'tyellow'}">${i.type}</span> <span class="tag tblue">${fmtDays(i.days||[i.day||'?'])}</span> ${i.start}–${i.end} — ${i.name}`);}
 function addSetupSubject(){
   const name=document.getElementById('sg_name').value.trim(),units=document.getElementById('sg_units').value||'3';
   if(!name) return alert('Enter subject name.');
@@ -515,22 +619,24 @@ function renderAll(){renderDash();renderSchedList();renderTxList();renderGradeLi
 
 // ── SCHEDULE ──
 function addSched(){
-  const name=document.getElementById('ap_name').value.trim(),day=document.getElementById('ap_day').value;
+  const name=document.getElementById('ap_name').value.trim();
+  const days=getSelDays('ap_days');
   const start=document.getElementById('ap_start').value,end=document.getElementById('ap_end').value,type=document.getElementById('ap_type').value;
   const err=document.getElementById('schedErr');
-  if(!name||!start||!end) return err.textContent='Please fill in all fields.';
+  if(!name||!days.length||!start||!end) return err.textContent='Fill in all fields and select at least one day.';
   err.textContent=''; const d=getD();
-  d.schedule.push({id:Date.now(),name,day,start,end,type}); saveD(d);
-  document.getElementById('ap_name').value=''; renderAll();
+  d.schedule.push({id:Date.now(),name,days,start,end,type}); saveD(d);
+  document.getElementById('ap_name').value=''; setSelDays('ap_days',[]); renderAll();
 }
 function delSched(id){const d=getD();d.schedule=d.schedule.filter(x=>x.id!==id);saveD(d);renderAll();}
 window.delSched=delSched;
+function getDays(s){return s.days||[s.day]||[];}
 function detectConflicts(sched){
   const ids=[],byDay={};
-  sched.forEach(s=>(byDay[s.day]=byDay[s.day]||[]).push(s));
+  sched.forEach(s=>getDays(s).forEach(day=>(byDay[day]=byDay[day]||[]).push(s)));
   Object.values(byDay).forEach(arr=>{
     for(let i=0;i<arr.length;i++) for(let j=i+1;j<arr.length;j++)
-      if(arr[i].start<arr[j].end&&arr[j].start<arr[i].end){if(!ids.includes(arr[i].id))ids.push(arr[i].id);if(!ids.includes(arr[j].id))ids.push(arr[j].id);}
+      if(arr[i].id!==arr[j].id&&arr[i].start<arr[j].end&&arr[j].start<arr[i].end){if(!ids.includes(arr[i].id))ids.push(arr[i].id);if(!ids.includes(arr[j].id))ids.push(arr[j].id);}
   }); return ids;
 }
 function renderSchedList(){
@@ -539,10 +645,11 @@ function renderSchedList(){
   const order=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
   const sorted=[...d.schedule].sort((a,b)=>order.indexOf(a.day)-order.indexOf(b.day));
   const conf=detectConflicts(d.schedule);
-  let h='<table class="tbl"><thead><tr><th>Day</th><th>Activity</th><th>Time</th><th>Type</th><th>Status</th><th></th></tr></thead><tbody>';
+  let h='<table class="tbl"><thead><tr><th>Days</th><th>Activity</th><th>Time</th><th>Type</th><th>Status</th><th></th></tr></thead><tbody>';
   sorted.forEach(s=>{
     const isC=conf.includes(s.id),tag=s.type==='Class'?'tblue':'tyellow';
-    h+=`<tr><td>${s.day}</td><td>${s.name}</td><td style="white-space:nowrap">${s.start}–${s.end}</td><td><span class="tag ${tag}">${s.type}</span></td><td>${isC?'<span class="tag tred">⚠ Conflict</span>':'<span class="tag tgreen">OK</span>'}</td><td><button class="dsm" onclick="delSched(${s.id})"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16"><path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/><path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/></svg></button></td></tr>`;
+    const daysLabel=fmtDays(getDays(s));
+    h+=`<tr><td><span class="tag tblue" style="font-size:0.68rem">${daysLabel}</span></td><td>${s.name}</td><td style="white-space:nowrap">${s.start}–${s.end}</td><td><span class="tag ${tag}">${s.type}</span></td><td>${isC?'<span class="tag tred">⚠ Conflict</span>':'<span class="tag tgreen">OK</span>'}</td><td style="white-space:nowrap"><button class="esm" onclick="editSched(${s.id})">✏️</button><button class="dsm" onclick="delSched(${s.id})">🗑</button></td></tr>`;
   });
   el.innerHTML=h+'</tbody></table>';
 }
@@ -572,7 +679,7 @@ function renderTxList(){
   let h='<table class="tbl"><thead><tr><th>Date</th><th>Description</th><th>Cat.</th><th>Amount</th><th></th></tr></thead><tbody>';
   sorted.forEach(t=>{
     const isIn=t.type==='income',col=isIn?'var(--accent4)':'var(--accent3)',sign=isIn?'+':'-',tag=isIn?'tgreen':'tred';
-    h+=`<tr><td style="white-space:nowrap">${t.date}</td><td>${t.desc}</td><td><span class="tag ${tag}">${t.cat}</span></td><td style="color:${col};font-weight:700;white-space:nowrap">${sign}₱${t.amount.toLocaleString()}</td><td><button class="dsm" onclick="delTx(${t.id})"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16"><path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/><path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/></svg></button></td></tr>`;
+    h+=`<tr><td style="white-space:nowrap">${t.date}</td><td>${t.desc}</td><td><span class="tag ${tag}">${t.cat}</span></td><td style="color:${col};font-weight:700;white-space:nowrap">${sign}₱${t.amount.toLocaleString()}</td><td style="white-space:nowrap"><button class="esm" onclick="editTx(${t.id})">✏️</button><button class="dsm" onclick="delTx(${t.id})">🗑</button></td></tr>`;
   });
   el.innerHTML=h+'</tbody></table>';
   const limits=d.profile.budgetLimits||{},spent={};
@@ -589,11 +696,50 @@ function renderTxList(){
 
 // ── GRADES ──
 const PERIODS=['Prelim','Midterm','Pre-Final','Final'];
+let gradeScale='1-5'; // '1-5' = 1 highest (PH), '4-1' = 4 highest (GPA)
+function setScale(sc){
+  gradeScale=sc;
+  document.getElementById('scale_uls').classList.toggle('active',sc==='1-5');
+  document.getElementById('scale_14').classList.toggle('active',sc==='4-1');
+  const lbl1=document.getElementById('gr_val_lbl'),lbl2=document.getElementById('edit_gr_lbl');
+  const inp=document.getElementById('gr_val'),inp2=document.getElementById('edit_grade_val');
+  if(sc==='1-5'){
+    const lbl='Grade (1.00 = Highest)';
+    if(lbl1)lbl1.textContent=lbl; if(lbl2)lbl2.textContent=lbl;
+    if(inp){inp.min=1;inp.max=5;inp.step=0.25;inp.placeholder='e.g. 1.75';}
+    if(inp2){inp2.min=1;inp2.max=5;inp2.step=0.25;inp2.placeholder='e.g. 1.75';}
+  } else {
+    const lbl='Grade (4.00 = Highest)';
+    if(lbl1)lbl1.textContent=lbl; if(lbl2)lbl2.textContent=lbl;
+    if(inp){inp.min=1;inp.max=4;inp.step=0.25;inp.placeholder='e.g. 3.75';}
+    if(inp2){inp2.min=1;inp2.max=4;inp2.step=0.25;inp2.placeholder='e.g. 3.75';}
+  }
+  renderGradeList();
+}
+function isGoodGrade(g){
+  // Returns true if grade is considered passing/good
+  if(gradeScale==='1-5') return g<=2.0;
+  else return g>=2.5;
+}
+function isRiskGrade(g){
+  if(gradeScale==='1-5') return g>2.5;
+  else return g<2.0;
+}
+function gradeColor(g){
+  if(gradeScale==='1-5') return g<=2?'var(--accent4)':g<=2.5?'var(--accent)':'var(--accent3)';
+  else return g>=3?'var(--accent4)':g>=2.5?'var(--accent)':'var(--accent3)';
+}
+function gradePct(g){
+  // percentage bar: higher = better
+  if(gradeScale==='1-5') return Math.max(0,Math.min(100,((5-g)/4)*100));
+  else return Math.max(0,Math.min(100,((g-1)/3)*100));
+}
 function addGrade(){
   const subj=document.getElementById('gr_subj').value,period=document.getElementById('gr_period').value;
   const val=parseFloat(document.getElementById('gr_val').value),err=document.getElementById('gradeErr');
   if(!subj) return err.textContent='Select a subject.';
-  if(!val||val<1||val>5) return err.textContent='Grade must be between 1.00 and 5.00.';
+  const maxG=gradeScale==='1-5'?5:4;
+  if(!val||val<1||val>maxG) return err.textContent=`Grade must be between 1.00 and ${maxG}.00.`;
   err.textContent=''; const d=getD();
   if(!d.grades[subj]) d.grades[subj]={};
   d.grades[subj][period]=val; saveD(d); document.getElementById('gr_val').value=''; renderAll();
@@ -609,9 +755,10 @@ function renderGradeList(){
   d.subjects.forEach(s=>{
     const g=d.grades[s.name]||{},vals=PERIODS.map(p=>g[p]).filter(Boolean);
     const avg=vals.length?(vals.reduce((a,b)=>a+b,0)/vals.length).toFixed(2):null;
-    if(avg){tg+=parseFloat(avg);gc++;}if(avg&&parseFloat(avg)>2.5)risk++;
-    const st=!avg?'<span class="tag tblue">—</span>':parseFloat(avg)<=2?'<span class="tag tgreen">Pass</span>':parseFloat(avg)<=2.5?'<span class="tag tyellow">Watch</span>':'<span class="tag tred">Risk</span>';
-    h+=`<tr><td>${s.name}</td><td>${s.units}</td>${PERIODS.map(p=>`<td>${g[p]||'—'}</td>`).join('')}<td><strong>${avg||'—'}</strong></td><td>${st}</td></tr>`;
+    if(avg){tg+=parseFloat(avg);gc++;}if(avg&&isRiskGrade(parseFloat(avg)))risk++;
+    const avgF=avg?parseFloat(avg):null;
+    const st=!avg?'<span class="tag tblue">—</span>':!isRiskGrade(avgF)&&isGoodGrade(avgF)?'<span class="tag tgreen">Pass</span>':!isRiskGrade(avgF)?'<span class="tag tyellow">Watch</span>':'<span class="tag tred">Risk</span>';
+    h+=`<tr><td>${s.name}</td><td>${s.units}</td>${PERIODS.map(p=>`<td>${g[p]?`${g[p]} <button class='esm' style='padding:2px 6px;font-size:0.68rem;' onclick='editGrade("${s.name}","${p}")'>✏️</button>`:'—'}</td>`).join('')}<td><strong>${avg||'—'}</strong></td><td>${st}</td></tr>`;
   });
   el.innerHTML=h+'</tbody></table>';
   document.getElementById('gAvg').textContent=gc?(tg/gc).toFixed(2):'—';
@@ -625,7 +772,7 @@ function renderDash(){
   const hr=now.getHours(),greet=hr<12?'Good morning':hr<17?'Good afternoon':'Good evening';
   document.getElementById('dGreet').textContent=`${greet}, ${u.name} 👋`;
   document.getElementById('dDate').textContent=now.toLocaleDateString('en-PH',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
-  const wMins=d.schedule.filter(s=>s.type==='Work').reduce((t,s)=>{const[sh,sm]=s.start.split(':').map(Number),[eh,em]=s.end.split(':').map(Number);return t+(eh*60+em-sh*60-sm);},0);
+  const wMins=d.schedule.filter(s=>s.type==='Work').reduce((t,s)=>{const[sh,sm]=s.start.split(':').map(Number),[eh,em]=s.end.split(':').map(Number);return t+(eh*60+em-sh*60-sm)*getDays(s).length;},0);
   const wHrs=(wMins/60).toFixed(1),maxH=d.profile.maxWorkHours||40;
   document.getElementById('dWork').textContent=wHrs+'h';
   document.getElementById('dWorkSub').textContent=`Limit: ${maxH}h/wk`;
@@ -640,15 +787,16 @@ function renderDash(){
   document.getElementById('dGPASub').textContent=gc?`${gc} subject(s)`:'No grades yet';
   document.getElementById('dConf').textContent=Math.floor(detectConflicts(d.schedule).length/2);
   // today
-  const dayName=now.toLocaleDateString('en-PH',{weekday:'long'});
-  const todayE=d.schedule.filter(s=>s.day===dayName);
+  const dayFull=now.toLocaleDateString('en-PH',{weekday:'long'});
+  const dayShort=dayFull.substring(0,3);
+  const todayE=d.schedule.filter(s=>getDays(s).includes(dayShort));
   const te=document.getElementById('dTodaySched');
   if(!todayE.length){te.innerHTML='<div class="empty"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16"><path d="M14 0H2a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2M1 3.857C1 3.384 1.448 3 2 3h12c.552 0 1 .384 1 .857v10.286c0 .473-.448.857-1 .857H2c-.552 0-1-.384-1-.857z"/><path d="M6.5 7a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m-9 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m-9 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2"/></svg>No entries for today.</div>';}
   else{let h='<table class="tbl"><thead><tr><th>Time</th><th>Activity</th><th>Type</th></tr></thead><tbody>';todayE.forEach(s=>{h+=`<tr><td style="white-space:nowrap">${s.start}–${s.end}</td><td>${s.name}</td><td><span class="tag ${s.type==='Class'?'tblue':'tyellow'}">${s.type}</span></td></tr>`;});te.innerHTML=h+'</tbody></table>';}
   // grades
   const ge=document.getElementById('dGrades');
   if(!d.subjects.length){ge.innerHTML='<div class="empty"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16"><path d="M8.211 2.047a.5.5 0 0 0-.422 0l-7.5 3.5a.5.5 0 0 0 .025.917l7.5 3a.5.5 0 0 0 .372 0L14 7.14V13a1 1 0 0 0-1 1v2h3v-2a1 1 0 0 0-1-1V6.739l.686-.275a.5.5 0 0 0 .025-.917z"/><path d="M4.176 9.032a.5.5 0 0 0-.656.327l-.5 1.7a.5.5 0 0 0 .294.605l4.5 1.8a.5.5 0 0 0 .372 0l4.5-1.8a.5.5 0 0 0 .294-.605l-.5-1.7a.5.5 0 0 0-.656-.327L8 10.466z"/></svg>No grades yet.</div>';}
-  else{let h='';d.subjects.slice(0,5).forEach(s=>{const g=d.grades[s.name]||{},vals=PERIODS.map(p=>g[p]).filter(Boolean),a=vals.length?(vals.reduce((x,y)=>x+y,0)/vals.length).toFixed(2):null;const pct=a?Math.max(0,Math.min(100,((5-parseFloat(a))/4)*100)):0,col=!a?'var(--muted)':parseFloat(a)<=2?'var(--accent4)':parseFloat(a)<=2.5?'var(--accent)':'var(--accent3)';h+=`<div class="grow"><div class="growl"><span>${s.name}</span><span style="color:${col}">${a||'No grade'}</span></div><div class="pbar"><div class="pfill" style="width:${pct}%;background:${col}"></div></div></div>`;});ge.innerHTML=h;}
+  else{let h='';d.subjects.slice(0,5).forEach(s=>{const g=d.grades[s.name]||{},vals=PERIODS.map(p=>g[p]).filter(Boolean),a=vals.length?(vals.reduce((x,y)=>x+y,0)/vals.length).toFixed(2):null;const af=a?parseFloat(a):null,pct=af?gradePct(af):0,col=!af?'var(--muted)':gradeColor(af);h+=`<div class="grow"><div class="growl"><span>${s.name}</span><span style="color:${col}">${a||'No grade'}</span></div><div class="pbar"><div class="pfill" style="width:${pct}%;background:${col}"></div></div></div>`;});ge.innerHTML=h;}
   // budget
   const be=document.getElementById('dBudget');
   if(!d.transactions.length){be.innerHTML='<div class="empty"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16"><path d="M12.136.326A1.5 1.5 0 0 1 14 1.78V3h.5A1.5 1.5 0 0 1 16 4.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 13.5v-9a1.5 1.5 0 0 1 1.432-1.499zM5.562 3H13V1.78a.5.5 0 0 0-.621-.484zM1.5 4a.5.5 0 0 0-.5.5v9a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5z"/></svg>No transactions yet.</div>';}
@@ -658,7 +806,7 @@ function renderDash(){
 // ── ALERTS ──
 function renderAlerts(){
   const d=getD(),alerts=[];
-  const wMins=d.schedule.filter(s=>s.type==='Work').reduce((t,s)=>{const[sh,sm]=s.start.split(':').map(Number),[eh,em]=s.end.split(':').map(Number);return t+(eh*60+em-sh*60-sm);},0);
+  const wMins=d.schedule.filter(s=>s.type==='Work').reduce((t,s)=>{const[sh,sm]=s.start.split(':').map(Number),[eh,em]=s.end.split(':').map(Number);return t+(eh*60+em-sh*60-sm)*getDays(s).length;},0);
   const wHrs=wMins/60,maxH=d.profile.maxWorkHours||40;
   if(wHrs>maxH) alerts.push({c:'var(--accent3)',t:`<strong>⚠ Work Overload:</strong> ${wHrs.toFixed(1)}h/week scheduled — over your ${maxH}h limit.`});
   const conf=detectConflicts(d.schedule);
@@ -668,7 +816,7 @@ function renderAlerts(){
   Object.entries(limits).forEach(([cat,lim])=>{if(lim>0&&(spent[cat]||0)>lim) alerts.push({c:'var(--accent3)',t:`<strong>💸 Over Budget:</strong> ${cat} (₱${(spent[cat]).toLocaleString()}) exceeds ₱${lim.toLocaleString()}.`});});
   let inc=0,exp=0; d.transactions.forEach(t=>t.type==='income'?inc+=t.amount:exp+=t.amount);
   if(d.transactions.length&&(inc-exp)<500) alerts.push({c:'var(--accent3)',t:`<strong>💸 Low Balance:</strong> ₱${(inc-exp).toLocaleString()} remaining. Spend carefully.`});
-  d.subjects.forEach(s=>{const g=d.grades[s.name]||{},vals=PERIODS.map(p=>g[p]).filter(Boolean),a=vals.length?vals.reduce((x,y)=>x+y,0)/vals.length:null;if(a&&a>2.5) alerts.push({c:'var(--accent)',t:`<strong>📚 At-Risk:</strong> ${s.name} — avg ${a.toFixed(2)}. Try reducing work shifts during exams.`});});
+  d.subjects.forEach(s=>{const g=d.grades[s.name]||{},vals=PERIODS.map(p=>g[p]).filter(Boolean),a=vals.length?vals.reduce((x,y)=>x+y,0)/vals.length:null;if(a&&isRiskGrade(a)) alerts.push({c:'var(--accent)',t:`<strong>📚 At-Risk:</strong> ${s.name} — avg ${a.toFixed(2)}. Try reducing work shifts during exams.`});});
   // badges
   const badge=document.getElementById('abadge'),bnbadge=document.getElementById('bnbadge');
   badge.style.display=alerts.length?'inline-block':'none'; badge.textContent=alerts.length;
@@ -685,10 +833,89 @@ function renderAlerts(){
   }
   const wRisk=Math.min(100,(wHrs/maxH)*100);
   const fRisk=inc>0?Math.min(100,(exp/inc)*100):0;
-  const aRisk=d.subjects.length?Math.min(100,(d.subjects.filter(s=>{const g=d.grades[s.name]||{},v=PERIODS.map(p=>g[p]).filter(Boolean),a=v.length?v.reduce((x,y)=>x+y,0)/v.length:null;return a&&a>2.5;}).length/d.subjects.length)*100):0;
+  const aRisk=d.subjects.length?Math.min(100,(d.subjects.filter(s=>{const g=d.grades[s.name]||{},v=PERIODS.map(p=>g[p]).filter(Boolean),a=v.length?v.reduce((x,y)=>x+y,0)/v.length:null;return a&&isRiskGrade(a);}).length/d.subjects.length)*100):0;
   function setR(id,bid,pct){const e=document.getElementById(id),b=document.getElementById(bid);e.textContent=pct>70?'High Risk':pct>40?'Moderate':'Stable';e.style.color=pct>70?'var(--accent3)':pct>40?'var(--accent)':'var(--accent4)';b.style.width=pct+'%';b.style.background=pct>70?'var(--accent3)':pct>40?'var(--accent)':'var(--accent4)';}
   setR('rW','rWB',wRisk); setR('rF','rFB',fRisk); setR('rA','rAB',aRisk);
 }
+
+
+// ── MODAL HELPERS ──
+function openModal(id){document.getElementById(id).classList.add('open');}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+// close on backdrop click
+document.addEventListener('click',e=>{if(e.target.classList.contains('modal-bg'))e.target.classList.remove('open');});
+
+// ── SCHEDULE EDIT ──
+function editSched(id){
+  const d=getD(),s=d.schedule.find(x=>x.id===id);if(!s)return;
+  document.getElementById('edit_sched_id').value=id;
+  document.getElementById('edit_sched_name').value=s.name;
+  setSelDays('edit_sched_days', getDays(s));
+  document.getElementById('edit_sched_type').value=s.type;
+  document.getElementById('edit_sched_start').value=s.start;
+  document.getElementById('edit_sched_end').value=s.end;
+  openModal('schedModal');
+}
+function saveSchedEdit(){
+  const id=parseInt(document.getElementById('edit_sched_id').value);
+  const name=document.getElementById('edit_sched_name').value.trim();
+  const days=getSelDays('edit_sched_days');
+  const type=document.getElementById('edit_sched_type').value;
+  const start=document.getElementById('edit_sched_start').value;
+  const end=document.getElementById('edit_sched_end').value;
+  if(!name||!days.length||!start||!end)return alert('Fill in all fields and select at least one day.');
+  const d=getD();const idx=d.schedule.findIndex(x=>x.id===id);
+  if(idx>-1){d.schedule[idx]={id,name,days,type,start,end};saveD(d);}
+  closeModal('schedModal');renderAll();
+}
+window.editSched=editSched;
+
+// ── TRANSACTION EDIT ──
+function editTx(id){
+  const d=getD(),t=d.transactions.find(x=>x.id===id);if(!t)return;
+  document.getElementById('edit_tx_id').value=id;
+  document.getElementById('edit_tx_desc').value=t.desc;
+  document.getElementById('edit_tx_amount').value=t.amount;
+  document.getElementById('edit_tx_type').value=t.type;
+  document.getElementById('edit_tx_cat').value=t.cat;
+  document.getElementById('edit_tx_date').value=t.date;
+  openModal('txModal');
+}
+function saveTxEdit(){
+  const id=parseInt(document.getElementById('edit_tx_id').value);
+  const desc=document.getElementById('edit_tx_desc').value.trim();
+  const amount=parseFloat(document.getElementById('edit_tx_amount').value);
+  const type=document.getElementById('edit_tx_type').value;
+  const cat=document.getElementById('edit_tx_cat').value;
+  const date=document.getElementById('edit_tx_date').value;
+  if(!desc||!amount||amount<=0)return alert('Fill in all fields correctly.');
+  const d=getD();const idx=d.transactions.findIndex(x=>x.id===id);
+  if(idx>-1){d.transactions[idx]={id,desc,amount,type,cat,date};saveD(d);}
+  closeModal('txModal');renderAll();
+}
+window.editTx=editTx;
+
+// ── GRADE EDIT ──
+function editGrade(subj,period){
+  const d=getD();const val=(d.grades[subj]||{})[period]||'';
+  document.getElementById('edit_grade_subj').value=subj;
+  document.getElementById('edit_grade_period').value=period;
+  document.getElementById('edit_grade_subj_display').value=subj;
+  document.getElementById('edit_grade_period_display').value=period;
+  document.getElementById('edit_grade_val').value=val;
+  openModal('gradeModal');
+}
+function saveGradeEdit(){
+  const subj=document.getElementById('edit_grade_subj').value;
+  const period=document.getElementById('edit_grade_period').value;
+  const val=parseFloat(document.getElementById('edit_grade_val').value);
+  const maxG=gradeScale==='1-5'?5:4;
+  if(!val||val<1||val>maxG)return alert(`Grade must be between 1.00 and ${maxG}.00.`);
+  const d=getD();if(!d.grades[subj])d.grades[subj]={};
+  d.grades[subj][period]=val;saveD(d);
+  closeModal('gradeModal');renderAll();
+}
+window.editGrade=editGrade;
 
 // ── INIT ──
 window.onload=()=>{

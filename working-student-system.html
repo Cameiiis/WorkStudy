@@ -398,6 +398,16 @@
         <div class="sc c4"><div class="sico"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/><path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0M7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0z"/></svg></div><div class="slbl">At-Risk</div><div class="sval" style="color:var(--accent3)" id="gRisk">0</div></div>
       </div>
       <div class="cbox">
+        <div class="ctitle" style="justify-content:space-between;flex-wrap:wrap;gap:8px;">
+          <span style="display:flex;align-items:center;gap:8px;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16"><path d="M1 2.828c.885-.37 2.154-.769 3.388-.893 1.33-.134 2.458.063 3.112.752v9.746c-.935-.53-2.12-.603-3.213-.493-1.18.12-2.37.461-3.287.811zm7.5-.141c.654-.689 1.782-.886 3.112-.752 1.234.124 2.503.523 3.388.893v9.923c-.918-.35-2.107-.692-3.287-.81-1.094-.111-2.278-.039-3.213.492zM8 1.783C7.015.936 5.587.81 4.287.94c-1.514.153-3.042.672-3.994 1.105A.5.5 0 0 0 0 2.5v11a.5.5 0 0 0 .707.455c.882-.4 2.303-.881 3.68-1.02 1.409-.142 2.59.087 3.223.877a.5.5 0 0 0 .78 0c.633-.79 1.814-1.019 3.222-.877 1.378.139 2.8.62 3.681 1.02A.5.5 0 0 0 16 13.5v-11a.5.5 0 0 0-.293-.455c-.952-.433-2.48-.952-3.994-1.105C10.413.809 8.985.936 8 1.783"/></svg>
+            Subjects
+          </span>
+          <button class="btn-main" style="margin:0;padding:7px 16px;font-size:0.8rem;" onclick="openAddSubjectModal()">+ Add Subject</button>
+        </div>
+        <div id="subjectMgmtList" style="margin-top:12px;"></div>
+      </div>
+      <div class="cbox">
         <div class="ctitle"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/><path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/></svg> Log Exam Score</div>
         <div class="form-group"><label class="lbl">Subject</label><select class="inp" id="gr_subj" onchange="updateExamList()"><option value="">Select subject...</option></select></div>
         <div class="g2">
@@ -487,6 +497,33 @@
     <div style="display:flex;gap:10px;margin-top:6px;">
       <button class="btn-out" style="flex:1" onclick="closeModal('gradeModal')">Cancel</button>
       <button class="btn-main" style="flex:2;margin-top:0" onclick="saveGradeEdit()">Save Changes</button>
+    </div>
+  </div>
+</div>
+<!-- Add Subject Modal -->
+<div class="modal-bg" id="addSubjectModal">
+  <div class="modal-box">
+    <div class="modal-title">Add Subject <button class="modal-close" onclick="closeModal('addSubjectModal')">✕</button></div>
+    <div class="form-group"><label class="lbl">Subject Name</label><input class="inp" id="new_subj_name" type="text" placeholder="e.g. Database Management"/></div>
+    <div class="form-group"><label class="lbl">Units</label><input class="inp" id="new_subj_units" type="number" inputmode="numeric" min="1" max="6" placeholder="e.g. 3"/></div>
+    <div class="err-msg" id="addSubjErr"></div>
+    <div style="display:flex;gap:10px;margin-top:6px;">
+      <button class="btn-out" style="flex:1" onclick="closeModal('addSubjectModal')">Cancel</button>
+      <button class="btn-main" style="flex:2;margin-top:0" onclick="saveNewSubject()">Add Subject</button>
+    </div>
+  </div>
+</div>
+<!-- Edit Subject Modal -->
+<div class="modal-bg" id="editSubjectModal">
+  <div class="modal-box">
+    <div class="modal-title">Edit Subject <button class="modal-close" onclick="closeModal('editSubjectModal')">✕</button></div>
+    <input type="hidden" id="edit_subj_idx"/>
+    <div class="form-group"><label class="lbl">Subject Name</label><input class="inp" id="edit_subj_name" type="text"/></div>
+    <div class="form-group"><label class="lbl">Units</label><input class="inp" id="edit_subj_units" type="number" inputmode="numeric" min="1" max="6"/></div>
+    <div class="err-msg" id="editSubjErr"></div>
+    <div style="display:flex;gap:10px;margin-top:6px;">
+      <button class="btn-out" style="flex:1" onclick="closeModal('editSubjectModal')">Cancel</button>
+      <button class="btn-main" style="flex:2;margin-top:0" onclick="saveSubjectEdit()">Save Changes</button>
     </div>
   </div>
 </div>
@@ -750,7 +787,89 @@ function addGrade(){
   document.getElementById('gr_total').value='';
   renderAll();
 }
+// ── SUBJECT MANAGEMENT ──
+function openAddSubjectModal(){
+  document.getElementById('new_subj_name').value='';
+  document.getElementById('new_subj_units').value='';
+  document.getElementById('addSubjErr').textContent='';
+  openModal('addSubjectModal');
+}
+function saveNewSubject(){
+  const name=document.getElementById('new_subj_name').value.trim();
+  const units=parseInt(document.getElementById('new_subj_units').value);
+  const err=document.getElementById('addSubjErr');
+  if(!name) return err.textContent='Please enter a subject name.';
+  if(!units||units<1||units>6) return err.textContent='Units must be between 1 and 6.';
+  const d=getD();
+  if(d.subjects.find(s=>s.name.toLowerCase()===name.toLowerCase())) return err.textContent='A subject with that name already exists.';
+  d.subjects.push({name,units});
+  saveD(d); closeModal('addSubjectModal'); renderAll();
+}
+function openEditSubjectModal(idx){
+  const d=getD(),s=d.subjects[idx];
+  if(!s) return;
+  document.getElementById('edit_subj_idx').value=idx;
+  document.getElementById('edit_subj_name').value=s.name;
+  document.getElementById('edit_subj_units').value=s.units;
+  document.getElementById('editSubjErr').textContent='';
+  openModal('editSubjectModal');
+}
+function saveSubjectEdit(){
+  const idx=parseInt(document.getElementById('edit_subj_idx').value);
+  const name=document.getElementById('edit_subj_name').value.trim();
+  const units=parseInt(document.getElementById('edit_subj_units').value);
+  const err=document.getElementById('editSubjErr');
+  if(!name) return err.textContent='Please enter a subject name.';
+  if(!units||units<1||units>6) return err.textContent='Units must be between 1 and 6.';
+  const d=getD();
+  const dup=d.subjects.find((s,i)=>i!==idx&&s.name.toLowerCase()===name.toLowerCase());
+  if(dup) return err.textContent='Another subject with that name already exists.';
+  const oldName=d.subjects[idx].name;
+  // rename grades key if name changed
+  if(oldName!==name && d.grades[oldName]){
+    d.grades[name]=d.grades[oldName];
+    delete d.grades[oldName];
+  }
+  d.subjects[idx]={name,units};
+  saveD(d); closeModal('editSubjectModal'); renderAll();
+}
+function delSubject(idx){
+  const d=getD(),s=d.subjects[idx];
+  if(!s) return;
+  if(!confirm('Delete "'+s.name+'" and all its exam scores?')) return;
+  delete d.grades[s.name];
+  d.subjects.splice(idx,1);
+  saveD(d); renderAll();
+}
+window.openEditSubjectModal=openEditSubjectModal; window.delSubject=delSubject;
+function renderSubjectMgmt(){
+  const d=getD(),el=document.getElementById('subjectMgmtList');
+  if(!el) return;
+  if(!d.subjects.length){
+    el.innerHTML='<div style="color:var(--muted);font-size:0.85rem;padding:6px 0;">No subjects yet. Click "+ Add Subject" to get started.</div>';
+    return;
+  }
+  let h='<table class="tbl"><thead><tr><th>Subject</th><th>Units</th><th>Exams</th><th></th></tr></thead><tbody>';
+  d.subjects.forEach((s,i)=>{
+    const exams=getExams(s.units);
+    const g=d.grades[s.name]||{};
+    const scored=exams.filter(e=>g[e]&&g[e].score!=null).length;
+    h+=`<tr>
+      <td><strong>${s.name}</strong></td>
+      <td><span class="tag tblue">${s.units} units</span></td>
+      <td style="color:var(--muted);font-size:0.82rem">${scored}/${exams.length} recorded</td>
+      <td style="white-space:nowrap">
+        <button class="esm" onclick="openEditSubjectModal(${i})">✏️</button>
+        <button class="dsm" onclick="delSubject(${i})">🗑</button>
+      </td>
+    </tr>`;
+  });
+  h+='</tbody></table>';
+  el.innerHTML=h;
+}
+
 function renderGradeList(){
+  renderSubjectMgmt();
   const d=getD(),sel=document.getElementById('gr_subj');
   sel.innerHTML='<option value="">Select subject...</option>';
   d.subjects.forEach(s=>sel.innerHTML+=`<option value="${s.name}">${s.name} (${s.units} units)</option>`);

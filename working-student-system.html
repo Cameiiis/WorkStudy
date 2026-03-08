@@ -378,37 +378,37 @@
         <div class="err-msg" id="txErr"></div>
       </div>
       <div class="cbox"><div class="ctitle"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M5 11.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m-3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2m0 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2m0 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2"/></svg> Transactions</div><div class="tbl-wrap"><div id="txList"></div></div></div>
-      <div class="cbox"><div class="ctitle"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16"><path d="M4 11H2v3h2zm5-4H7v7h2zm5-5v12h-2V2zm-2-1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM6 7a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1zm-5 4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1z"/></svg> Spending vs Budget</div><div id="budgetBars"></div></div>
+      <div class="cbox">
+        <div class="ctitle" style="justify-content:space-between;">
+          <span><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16"><path d="M4 11H2v3h2zm5-4H7v7h2zm5-5v12h-2V2zm-2-1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM6 7a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1zm-5 4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1z"/></svg> Spending vs Budget</span>
+          <button class="esm" onclick="openBudgetLimits()" style="font-size:0.78rem;padding:6px 12px;">✏️ Edit Limits</button>
+        </div>
+        <div id="budgetBars"></div>
+      </div>
     </section>
 
     <!-- GRADES -->
     <section class="section" id="grades">
       <div class="topbar">
-        <div><div class="ptitle">Grades</div><div class="psub">Track academic performance</div></div>
-        <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
-          <span style="font-size:0.75rem;color:var(--muted);font-weight:600;">Scale:</span>
-          <div style="display:flex;background:rgba(255,255,255,0.04);border-radius:8px;padding:3px;gap:2px;">
-            <div class="scale-btn active" id="scale_uls" onclick="setScale('1-5')" title="1.00 Highest, 5.00 Lowest (Philippine system)">1–5</div>
-            <div class="scale-btn" id="scale_14" onclick="setScale('4-1')" title="4.00 Highest, 1.00 Lowest (GPA system)">4–1</div>
-          </div>
-        </div>
+        <div><div class="ptitle">Exam Scores</div><div class="psub">Track scores per subject per exam</div></div>
       </div>
       <div class="sgrid" style="grid-template-columns:repeat(3,1fr);">
-        <div class="sc c3"><div class="sico"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16"><path d="M9.669.864 8 0 6.331.864l-1.858.282-.842 1.68-1.337 1.32L2.6 6l-.306 1.854 1.337 1.32.842 1.68 1.858.282L8 12l1.669-.864 1.858-.282.842-1.68 1.337-1.32L13.4 6l.306-1.854-1.337-1.32-.842-1.68zm1.196 1.193.684 1.365 1.086 1.072L12.387 6l.248 1.506-1.086 1.072-.684 1.365-1.51.229L8 10.874l-1.355-.702-1.51-.229-.684-1.365-1.086-1.072L3.614 6l-.25-1.506 1.087-1.072.684-1.365 1.51-.229L8 1.126l1.356.702z"/><path d="M4 11.794V16l4-1 4 1v-4.206l-2.018.306L8 13.126 6.018 12.1z"/></svg></div><div class="slbl">Avg Grade</div><div class="sval" style="color:var(--accent4)" id="gAvg">—</div></div>
+        <div class="sc c3"><div class="sico"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16"><path d="M9.669.864 8 0 6.331.864l-1.858.282-.842 1.68-1.337 1.32L2.6 6l-.306 1.854 1.337 1.32.842 1.68 1.858.282L8 12l1.669-.864 1.858-.282.842-1.68 1.337-1.32L13.4 6l.306-1.854-1.337-1.32-.842-1.68zm1.196 1.193.684 1.365 1.086 1.072L12.387 6l.248 1.506-1.086 1.072-.684 1.365-1.51.229L8 10.874l-1.355-.702-1.51-.229-.684-1.365-1.086-1.072L3.614 6l-.25-1.506 1.087-1.072.684-1.365 1.51-.229L8 1.126l1.356.702z"/><path d="M4 11.794V16l4-1 4 1v-4.206l-2.018.306L8 13.126 6.018 12.1z"/></svg></div><div class="slbl">Avg Score %</div><div class="sval" style="color:var(--accent4)" id="gAvg">—</div></div>
         <div class="sc c1"><div class="sico"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16"><path d="M1 2.828c.885-.37 2.154-.769 3.388-.893 1.33-.134 2.458.063 3.112.752v9.746c-.935-.53-2.12-.603-3.213-.493-1.18.12-2.37.461-3.287.811zm7.5-.141c.654-.689 1.782-.886 3.112-.752 1.234.124 2.503.523 3.388.893v9.923c-.918-.35-2.107-.692-3.287-.81-1.094-.111-2.278-.039-3.213.492zM8 1.783C7.015.936 5.587.81 4.287.94c-1.514.153-3.042.672-3.994 1.105A.5.5 0 0 0 0 2.5v11a.5.5 0 0 0 .707.455c.882-.4 2.303-.881 3.68-1.02 1.409-.142 2.59.087 3.223.877a.5.5 0 0 0 .78 0c.633-.79 1.814-1.019 3.222-.877 1.378.139 2.8.62 3.681 1.02A.5.5 0 0 0 16 13.5v-11a.5.5 0 0 0-.293-.455c-.952-.433-2.48-.952-3.994-1.105C10.413.809 8.985.936 8 1.783"/></svg></div><div class="slbl">Subjects</div><div class="sval" style="color:var(--accent)" id="gSubj">0</div></div>
         <div class="sc c4"><div class="sico"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/><path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0M7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0z"/></svg></div><div class="slbl">At-Risk</div><div class="sval" style="color:var(--accent3)" id="gRisk">0</div></div>
       </div>
       <div class="cbox">
-        <div class="ctitle"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/><path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/></svg> Log Grade</div>
-        <div class="form-group"><label class="lbl">Subject</label><select class="inp" id="gr_subj"><option value="">Select subject...</option></select></div>
+        <div class="ctitle"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/><path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/></svg> Log Exam Score</div>
+        <div class="form-group"><label class="lbl">Subject</label><select class="inp" id="gr_subj" onchange="updateExamList()"><option value="">Select subject...</option></select></div>
         <div class="g2">
-          <div class="form-group"><label class="lbl">Period</label><select class="inp" id="gr_period"><option>Prelim</option><option>Midterm</option><option>Pre-Final</option><option>Final</option></select></div>
-          <div class="form-group"><label class="lbl" id="gr_val_lbl">Grade (1.00 = Highest)</label><input class="inp" id="gr_val" type="number" inputmode="decimal" step="0.25" min="1" max="5" placeholder="e.g. 1.75"/></div>
+          <div class="form-group"><label class="lbl">Exam</label><select class="inp" id="gr_period"><option value="">Select subject first...</option></select></div>
+          <div class="form-group"><label class="lbl">Score</label><input class="inp" id="gr_score" type="number" inputmode="decimal" min="0" placeholder="e.g. 40"/></div>
+          <div class="form-group"><label class="lbl">Total / Max Score</label><input class="inp" id="gr_total" type="number" inputmode="decimal" min="1" placeholder="e.g. 50"/></div>
         </div>
-        <button class="btn-main" onclick="addGrade()">Save Grade</button>
+        <button class="btn-main" onclick="addGrade()">Save Score</button>
         <div class="err-msg" id="gradeErr"></div>
       </div>
-      <div class="cbox"><div class="ctitle"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16"><path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm15 2h-4v3h4zm0 4h-4v3h4zm0 4h-4v3h3a1 1 0 0 0 1-1zm-5 3v-3H6v3zm-5 0v-3H1v2a1 1 0 0 0 1 1zm-4-4h4V8H1zm0-4h4V4H1zm5-3v3h4V4zm4 4H6v3h4z"/></svg> Grade Sheet</div><div class="tbl-wrap"><div id="gradeList"></div></div></div>
+      <div class="cbox"><div class="ctitle"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16"><path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm15 2h-4v3h4zm0 4h-4v3h4zm0 4h-4v3h3a1 1 0 0 0 1-1zm-5 3v-3H6v3zm-5 0v-3H1v2a1 1 0 0 0 1 1zm-4-4h4V8H1zm0-4h4V4H1zm5-3v3h4V4zm4 4H6v3h4z"/></svg> Exam Score Sheet</div><div class="tbl-wrap"><div id="gradeList"></div></div></div>
     </section>
 
     <!-- ALERTS -->
@@ -472,18 +472,39 @@
     </div>
   </div>
 </div>
-<!-- Grade Edit Modal -->
+<!-- Exam Score Edit Modal -->
 <div class="modal-bg" id="gradeModal">
   <div class="modal-box">
-    <div class="modal-title">Edit Grade <button class="modal-close" onclick="closeModal('gradeModal')">✕</button></div>
+    <div class="modal-title">Edit Exam Score <button class="modal-close" onclick="closeModal('gradeModal')">✕</button></div>
     <input type="hidden" id="edit_grade_subj"/>
     <input type="hidden" id="edit_grade_period"/>
     <div class="form-group"><label class="lbl">Subject</label><input class="inp" id="edit_grade_subj_display" type="text" readonly style="opacity:0.6;cursor:not-allowed;"/></div>
-    <div class="form-group"><label class="lbl">Period</label><input class="inp" id="edit_grade_period_display" type="text" readonly style="opacity:0.6;cursor:not-allowed;"/></div>
-    <div class="form-group"><label class="lbl" id="edit_gr_lbl">Grade (1.00 = Highest)</label><input class="inp" id="edit_grade_val" type="number" inputmode="decimal" step="0.25" min="1" max="5" placeholder="e.g. 1.75"/></div>
+    <div class="form-group"><label class="lbl">Exam</label><input class="inp" id="edit_grade_period_display" type="text" readonly style="opacity:0.6;cursor:not-allowed;"/></div>
+    <div class="g2">
+      <div class="form-group"><label class="lbl">Score</label><input class="inp" id="edit_grade_val" type="number" inputmode="decimal" min="0" placeholder="e.g. 40"/></div>
+      <div class="form-group"><label class="lbl">Total / Max</label><input class="inp" id="edit_grade_total" type="number" inputmode="decimal" min="1" placeholder="e.g. 50"/></div>
+    </div>
     <div style="display:flex;gap:10px;margin-top:6px;">
       <button class="btn-out" style="flex:1" onclick="closeModal('gradeModal')">Cancel</button>
       <button class="btn-main" style="flex:2;margin-top:0" onclick="saveGradeEdit()">Save Changes</button>
+    </div>
+  </div>
+</div>
+<!-- Budget Limits Edit Modal -->
+<div class="modal-bg" id="budgetLimitsModal">
+  <div class="modal-box">
+    <div class="modal-title">Edit Budget Limits <button class="modal-close" onclick="closeModal('budgetLimitsModal')">✕</button></div>
+    <div class="g2">
+      <div class="form-group"><label class="lbl">Tuition (₱)</label><input class="inp" id="bl_edit_tuition" type="number" inputmode="numeric" placeholder="0"/></div>
+      <div class="form-group"><label class="lbl">Rent / Bills (₱)</label><input class="inp" id="bl_edit_rent" type="number" inputmode="numeric" placeholder="0"/></div>
+      <div class="form-group"><label class="lbl">Food (₱)</label><input class="inp" id="bl_edit_food" type="number" inputmode="numeric" placeholder="0"/></div>
+      <div class="form-group"><label class="lbl">Transport (₱)</label><input class="inp" id="bl_edit_transport" type="number" inputmode="numeric" placeholder="0"/></div>
+      <div class="form-group"><label class="lbl">Others (₱)</label><input class="inp" id="bl_edit_others" type="number" inputmode="numeric" placeholder="0"/></div>
+      <div class="form-group"><label class="lbl">Max Work Hrs/Week</label><input class="inp" id="bl_edit_maxhrs" type="number" inputmode="numeric" placeholder="40"/></div>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:6px;">
+      <button class="btn-out" style="flex:1" onclick="closeModal('budgetLimitsModal')">Cancel</button>
+      <button class="btn-main" style="flex:2;margin-top:0" onclick="saveBudgetLimits()">Save Limits</button>
     </div>
   </div>
 </div>
@@ -694,76 +715,107 @@ function renderTxList(){
   document.getElementById('budgetBars').innerHTML=bars||'<div class="empty"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16"><path d="M4 11H2v3h2zm5-4H7v7h2zm5-5v12h-2V2zm-2-1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM6 7a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1zm-5 4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1z"/></svg>No expense data yet.</div>';
 }
 
-// ── GRADES ──
-const PERIODS=['Prelim','Midterm','Pre-Final','Final'];
-let gradeScale='1-5'; // '1-5' = 1 highest (PH), '4-1' = 4 highest (GPA)
-function setScale(sc){
-  gradeScale=sc;
-  document.getElementById('scale_uls').classList.toggle('active',sc==='1-5');
-  document.getElementById('scale_14').classList.toggle('active',sc==='4-1');
-  const lbl1=document.getElementById('gr_val_lbl'),lbl2=document.getElementById('edit_gr_lbl');
-  const inp=document.getElementById('gr_val'),inp2=document.getElementById('edit_grade_val');
-  if(sc==='1-5'){
-    const lbl='Grade (1.00 = Highest)';
-    if(lbl1)lbl1.textContent=lbl; if(lbl2)lbl2.textContent=lbl;
-    if(inp){inp.min=1;inp.max=5;inp.step=0.25;inp.placeholder='e.g. 1.75';}
-    if(inp2){inp2.min=1;inp2.max=5;inp2.step=0.25;inp2.placeholder='e.g. 1.75';}
-  } else {
-    const lbl='Grade (4.00 = Highest)';
-    if(lbl1)lbl1.textContent=lbl; if(lbl2)lbl2.textContent=lbl;
-    if(inp){inp.min=1;inp.max=4;inp.step=0.25;inp.placeholder='e.g. 3.75';}
-    if(inp2){inp2.min=1;inp2.max=4;inp2.step=0.25;inp2.placeholder='e.g. 3.75';}
-  }
-  renderGradeList();
+// ── EXAM SCORES ──
+// ≥4 units → 8 exams (8th = Final), ≤3 units → 4 exams (4th = Final)
+function getExams(units){
+  const u=parseInt(units)||3;
+  return u>=4
+    ?['Exam 1','Exam 2','Exam 3','Exam 4','Exam 5','Exam 6','Exam 7','Final Exam']
+    :['Exam 1','Exam 2','Exam 3','Final Exam'];
 }
-function isGoodGrade(g){
-  // Returns true if grade is considered passing/good
-  if(gradeScale==='1-5') return g<=2.0;
-  else return g>=2.5;
+function updateExamList(){
+  const subj=document.getElementById('gr_subj').value;
+  const sel=document.getElementById('gr_period');
+  if(!subj){sel.innerHTML='<option>Select subject first...</option>';return;}
+  const d=getD(),s=d.subjects.find(x=>x.name===subj);
+  sel.innerHTML=getExams(s?s.units:3).map(e=>`<option>${e}</option>`).join('');
 }
-function isRiskGrade(g){
-  if(gradeScale==='1-5') return g>2.5;
-  else return g<2.0;
-}
-function gradeColor(g){
-  if(gradeScale==='1-5') return g<=2?'var(--accent4)':g<=2.5?'var(--accent)':'var(--accent3)';
-  else return g>=3?'var(--accent4)':g>=2.5?'var(--accent)':'var(--accent3)';
-}
-function gradePct(g){
-  // percentage bar: higher = better
-  if(gradeScale==='1-5') return Math.max(0,Math.min(100,((5-g)/4)*100));
-  else return Math.max(0,Math.min(100,((g-1)/3)*100));
-}
+function isRiskGrade(pct){return pct<60;}
+function isGoodGrade(pct){return pct>=75;}
+function gradeColor(pct){return pct>=75?'var(--accent4)':pct>=60?'var(--accent)':'var(--accent3)';}
+function gradePct(pct){return Math.min(100,Math.max(0,pct));}
 function addGrade(){
   const subj=document.getElementById('gr_subj').value,period=document.getElementById('gr_period').value;
-  const val=parseFloat(document.getElementById('gr_val').value),err=document.getElementById('gradeErr');
-  if(!subj) return err.textContent='Select a subject.';
-  const maxG=gradeScale==='1-5'?5:4;
-  if(!val||val<1||val>maxG) return err.textContent=`Grade must be between 1.00 and ${maxG}.00.`;
+  const score=parseFloat(document.getElementById('gr_score').value);
+  const total=parseFloat(document.getElementById('gr_total').value);
+  const err=document.getElementById('gradeErr');
+  if(!subj||!period||period==='Select subject first...') return err.textContent='Select a subject and exam.';
+  if(isNaN(score)||score<0) return err.textContent='Enter a valid score (0 or more).';
+  if(isNaN(total)||total<=0) return err.textContent='Enter a valid total score.';
+  if(score>total) return err.textContent='Score cannot exceed total.';
   err.textContent=''; const d=getD();
   if(!d.grades[subj]) d.grades[subj]={};
-  d.grades[subj][period]=val; saveD(d); document.getElementById('gr_val').value=''; renderAll();
+  d.grades[subj][period]={score,total}; saveD(d);
+  document.getElementById('gr_score').value='';
+  document.getElementById('gr_total').value='';
+  renderAll();
 }
 function renderGradeList(){
   const d=getD(),sel=document.getElementById('gr_subj');
   sel.innerHTML='<option value="">Select subject...</option>';
-  d.subjects.forEach(s=>sel.innerHTML+=`<option value="${s.name}">${s.name}</option>`);
+  d.subjects.forEach(s=>sel.innerHTML+=`<option value="${s.name}">${s.name} (${s.units} units)</option>`);
+  updateExamList();
   const el=document.getElementById('gradeList');
-  if(!d.subjects.length){el.innerHTML='<div class="empty"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16"><path d="M8.211 2.047a.5.5 0 0 0-.422 0l-7.5 3.5a.5.5 0 0 0 .025.917l7.5 3a.5.5 0 0 0 .372 0L14 7.14V13a1 1 0 0 0-1 1v2h3v-2a1 1 0 0 0-1-1V6.739l.686-.275a.5.5 0 0 0 .025-.917z"/><path d="M4.176 9.032a.5.5 0 0 0-.656.327l-.5 1.7a.5.5 0 0 0 .294.605l4.5 1.8a.5.5 0 0 0 .372 0l4.5-1.8a.5.5 0 0 0 .294-.605l-.5-1.7a.5.5 0 0 0-.656-.327L8 10.466z"/></svg>No subjects. Complete setup first.</div>';document.getElementById('gAvg').textContent='—';document.getElementById('gSubj').textContent='0';document.getElementById('gRisk').textContent='0';return;}
-  let h='<table class="tbl"><thead><tr><th>Subject</th><th>Units</th>'+PERIODS.map(p=>`<th>${p}</th>`).join('')+'<th>Avg</th><th>Status</th></tr></thead><tbody>';
-  let tg=0,gc=0,risk=0;
+  if(!d.subjects.length){
+    el.innerHTML='<div class="empty">No subjects yet. Complete setup first.</div>';
+    document.getElementById('gAvg').textContent='—';
+    document.getElementById('gSubj').textContent='0';
+    document.getElementById('gRisk').textContent='0';
+    return;
+  }
+  let totalPct=0,subjWithGrades=0,riskCount=0;
+  let html='';
   d.subjects.forEach(s=>{
-    const g=d.grades[s.name]||{},vals=PERIODS.map(p=>g[p]).filter(Boolean);
-    const avg=vals.length?(vals.reduce((a,b)=>a+b,0)/vals.length).toFixed(2):null;
-    if(avg){tg+=parseFloat(avg);gc++;}if(avg&&isRiskGrade(parseFloat(avg)))risk++;
-    const avgF=avg?parseFloat(avg):null;
-    const st=!avg?'<span class="tag tblue">—</span>':!isRiskGrade(avgF)&&isGoodGrade(avgF)?'<span class="tag tgreen">Pass</span>':!isRiskGrade(avgF)?'<span class="tag tyellow">Watch</span>':'<span class="tag tred">Risk</span>';
-    h+=`<tr><td>${s.name}</td><td>${s.units}</td>${PERIODS.map(p=>`<td>${g[p]?`${g[p]} <button class='esm' style='padding:2px 6px;font-size:0.68rem;' onclick='editGrade("${s.name}","${p}")'>✏️</button>`:'—'}</td>`).join('')}<td><strong>${avg||'—'}</strong></td><td>${st}</td></tr>`;
+    const exams=getExams(s.units),g=d.grades[s.name]||{};
+    const scored=exams.filter(e=>g[e]&&g[e].score!=null);
+    const totScore=scored.reduce((a,e)=>a+(g[e].score||0),0);
+    const totMax=scored.reduce((a,e)=>a+(g[e].total||0),0);
+    const pct=totMax>0?Math.round((totScore/totMax)*100):null;
+    const isFinal=exams[exams.length-1];
+    if(pct!=null){totalPct+=pct;subjWithGrades++;if(isRiskGrade(pct))riskCount++;}
+    const col=pct==null?'var(--muted)':gradeColor(pct);
+    const st=pct==null?'<span class="tag tblue">—</span>':isGoodGrade(pct)?'<span class="tag tgreen">Passing</span>':isRiskGrade(pct)?'<span class="tag tred">At-Risk</span>':'<span class="tag tyellow">Borderline</span>';
+    let examRows='';
+    exams.forEach(e=>{
+      const entry=g[e],isFinalExam=(e===isFinal);
+      const label=isFinalExam?`<strong>${e}</strong>`:e;
+      if(entry&&entry.score!=null){
+        const epct=entry.total>0?Math.round((entry.score/entry.total)*100):0;
+        const ecol=gradeColor(epct);
+        examRows+=`<tr>
+          <td style="padding-left:18px;color:var(--muted);font-size:0.79rem">${label}</td>
+          <td style="font-weight:700;color:${ecol}">${entry.score} / ${entry.total}</td>
+          <td><span class="tag" style="background:rgba(80,227,164,0.08);color:${ecol};font-size:0.68rem">${epct}%</span></td>
+          <td style="white-space:nowrap">
+            <button class="esm" style="padding:2px 7px;font-size:0.7rem" onclick="editGrade('${s.name.replace(/'/g,"\\'")}','${e.replace(/'/g,"\\'")}')">✏️</button>
+            <button class="dsm" style="padding:2px 7px;font-size:0.7rem" onclick="delGrade('${s.name.replace(/'/g,"\\'")}','${e.replace(/'/g,"\\'")}')">🗑</button>
+          </td></tr>`;
+      } else {
+        examRows+=`<tr>
+          <td style="padding-left:18px;color:var(--muted);font-size:0.79rem">${label}</td>
+          <td style="color:var(--muted);font-size:0.79rem">Not recorded</td><td></td><td></td></tr>`;
+      }
+    });
+    html+=`<div class="cbox" style="margin-bottom:14px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px;">
+        <div>
+          <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:0.97rem">${s.name}</div>
+          <div style="font-size:0.73rem;color:var(--muted)">${s.units} units · ${exams.length} exams · ${scored.length} recorded</div>
+        </div>
+        <div style="text-align:right">${st}${pct!=null?`<div style="font-family:'Space Grotesk',sans-serif;font-size:1.3rem;font-weight:800;color:${col};margin-top:2px">${pct}%</div>`:''}
+        </div>
+      </div>
+      ${pct!=null?`<div class="pbar" style="margin-bottom:12px"><div class="pfill" style="width:${pct}%;background:${col}"></div></div>`:''}
+      <div class="tbl-wrap"><table class="tbl">
+        <thead><tr><th>Exam</th><th>Score</th><th>%</th><th></th></tr></thead>
+        <tbody>${examRows}</tbody>
+      </table></div>
+    </div>`;
   });
-  el.innerHTML=h+'</tbody></table>';
-  document.getElementById('gAvg').textContent=gc?(tg/gc).toFixed(2):'—';
+  el.innerHTML=html;
+  document.getElementById('gAvg').textContent=subjWithGrades?(totalPct/subjWithGrades).toFixed(1)+'%':'—';
   document.getElementById('gSubj').textContent=d.subjects.length;
-  document.getElementById('gRisk').textContent=risk;
+  document.getElementById('gRisk').textContent=riskCount;
 }
 
 // ── DASHBOARD ──
@@ -781,10 +833,10 @@ function renderDash(){
   document.getElementById('dBal').textContent='₱'+bal.toLocaleString();
   document.getElementById('dBalSub').textContent=`Income: ₱${inc.toLocaleString()}`;
   let tg=0,gc=0;
-  d.subjects.forEach(s=>{const g=d.grades[s.name]||{},vals=PERIODS.map(p=>g[p]).filter(Boolean);if(vals.length){tg+=vals.reduce((a,b)=>a+b,0)/vals.length;gc++;}});
-  const avg=gc?(tg/gc).toFixed(2):'—';
+  d.subjects.forEach(s=>{const exms=getExams(s.units),g=d.grades[s.name]||{},scored=exms.filter(e=>g[e]&&g[e].score!=null);const tS=scored.reduce((a,e)=>a+(g[e].score||0),0),tM=scored.reduce((a,e)=>a+(g[e].total||0),0);if(tM>0){tg+=Math.round((tS/tM)*100);gc++;}});
+  const avg=gc?(tg/gc).toFixed(0)+'%':'—';
   document.getElementById('dGPA').textContent=avg;
-  document.getElementById('dGPASub').textContent=gc?`${gc} subject(s)`:'No grades yet';
+  document.getElementById('dGPASub').textContent=gc?`${gc} subject(s)`:'No scores yet';
   document.getElementById('dConf').textContent=Math.floor(detectConflicts(d.schedule).length/2);
   // today
   const dayFull=now.toLocaleDateString('en-PH',{weekday:'long'});
@@ -796,7 +848,7 @@ function renderDash(){
   // grades
   const ge=document.getElementById('dGrades');
   if(!d.subjects.length){ge.innerHTML='<div class="empty"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16"><path d="M8.211 2.047a.5.5 0 0 0-.422 0l-7.5 3.5a.5.5 0 0 0 .025.917l7.5 3a.5.5 0 0 0 .372 0L14 7.14V13a1 1 0 0 0-1 1v2h3v-2a1 1 0 0 0-1-1V6.739l.686-.275a.5.5 0 0 0 .025-.917z"/><path d="M4.176 9.032a.5.5 0 0 0-.656.327l-.5 1.7a.5.5 0 0 0 .294.605l4.5 1.8a.5.5 0 0 0 .372 0l4.5-1.8a.5.5 0 0 0 .294-.605l-.5-1.7a.5.5 0 0 0-.656-.327L8 10.466z"/></svg>No grades yet.</div>';}
-  else{let h='';d.subjects.slice(0,5).forEach(s=>{const g=d.grades[s.name]||{},vals=PERIODS.map(p=>g[p]).filter(Boolean),a=vals.length?(vals.reduce((x,y)=>x+y,0)/vals.length).toFixed(2):null;const af=a?parseFloat(a):null,pct=af?gradePct(af):0,col=!af?'var(--muted)':gradeColor(af);h+=`<div class="grow"><div class="growl"><span>${s.name}</span><span style="color:${col}">${a||'No grade'}</span></div><div class="pbar"><div class="pfill" style="width:${pct}%;background:${col}"></div></div></div>`;});ge.innerHTML=h;}
+  else{let h='';d.subjects.slice(0,5).forEach(s=>{const exms=getExams(s.units),g=d.grades[s.name]||{},scored=exms.filter(e=>g[e]&&g[e].score!=null);const tScore=scored.reduce((a,e)=>a+(g[e].score||0),0),tMax=scored.reduce((a,e)=>a+(g[e].total||0),0);const pct=tMax>0?Math.round((tScore/tMax)*100):null;const col=pct==null?'var(--muted)':gradeColor(pct);h+=`<div class="grow"><div class="growl"><span>${s.name}</span><span style="color:${col}">${pct!=null?pct+'%':'No scores'}</span></div><div class="pbar"><div class="pfill" style="width:${pct||0}%;background:${col}"></div></div></div>`;});ge.innerHTML=h;}
   // budget
   const be=document.getElementById('dBudget');
   if(!d.transactions.length){be.innerHTML='<div class="empty"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16"><path d="M12.136.326A1.5 1.5 0 0 1 14 1.78V3h.5A1.5 1.5 0 0 1 16 4.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 13.5v-9a1.5 1.5 0 0 1 1.432-1.499zM5.562 3H13V1.78a.5.5 0 0 0-.621-.484zM1.5 4a.5.5 0 0 0-.5.5v9a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5z"/></svg>No transactions yet.</div>';}
@@ -816,7 +868,7 @@ function renderAlerts(){
   Object.entries(limits).forEach(([cat,lim])=>{if(lim>0&&(spent[cat]||0)>lim) alerts.push({c:'var(--accent3)',t:`<strong>💸 Over Budget:</strong> ${cat} (₱${(spent[cat]).toLocaleString()}) exceeds ₱${lim.toLocaleString()}.`});});
   let inc=0,exp=0; d.transactions.forEach(t=>t.type==='income'?inc+=t.amount:exp+=t.amount);
   if(d.transactions.length&&(inc-exp)<500) alerts.push({c:'var(--accent3)',t:`<strong>💸 Low Balance:</strong> ₱${(inc-exp).toLocaleString()} remaining. Spend carefully.`});
-  d.subjects.forEach(s=>{const g=d.grades[s.name]||{},vals=PERIODS.map(p=>g[p]).filter(Boolean),a=vals.length?vals.reduce((x,y)=>x+y,0)/vals.length:null;if(a&&isRiskGrade(a)) alerts.push({c:'var(--accent)',t:`<strong>📚 At-Risk:</strong> ${s.name} — avg ${a.toFixed(2)}. Try reducing work shifts during exams.`});});
+  d.subjects.forEach(s=>{const exms=getExams(s.units),g=d.grades[s.name]||{},scored=exms.filter(e=>g[e]&&g[e].score!=null);const tS=scored.reduce((a,e)=>a+(g[e].score||0),0),tM=scored.reduce((a,e)=>a+(g[e].total||0),0);const pct=tM>0?Math.round((tS/tM)*100):null;if(pct!=null&&isRiskGrade(pct)) alerts.push({c:'var(--accent)',t:`<strong>📚 At-Risk:</strong> ${s.name} — ${pct}% avg. Try reducing work shifts during exams.`});});
   // badges
   const badge=document.getElementById('abadge'),bnbadge=document.getElementById('bnbadge');
   badge.style.display=alerts.length?'inline-block':'none'; badge.textContent=alerts.length;
@@ -833,7 +885,7 @@ function renderAlerts(){
   }
   const wRisk=Math.min(100,(wHrs/maxH)*100);
   const fRisk=inc>0?Math.min(100,(exp/inc)*100):0;
-  const aRisk=d.subjects.length?Math.min(100,(d.subjects.filter(s=>{const g=d.grades[s.name]||{},v=PERIODS.map(p=>g[p]).filter(Boolean),a=v.length?v.reduce((x,y)=>x+y,0)/v.length:null;return a&&isRiskGrade(a);}).length/d.subjects.length)*100):0;
+  const aRisk=d.subjects.length?Math.min(100,(d.subjects.filter(s=>{const exms=getExams(s.units),g=d.grades[s.name]||{},sc=exms.filter(e=>g[e]&&g[e].score!=null);const tS=sc.reduce((a,e)=>a+(g[e].score||0),0),tM=sc.reduce((a,e)=>a+(g[e].total||0),0);const pct=tM>0?Math.round((tS/tM)*100):null;return pct!=null&&isRiskGrade(pct);}).length/d.subjects.length)*100):0;
   function setR(id,bid,pct){const e=document.getElementById(id),b=document.getElementById(bid);e.textContent=pct>70?'High Risk':pct>40?'Moderate':'Stable';e.style.color=pct>70?'var(--accent3)':pct>40?'var(--accent)':'var(--accent4)';b.style.width=pct+'%';b.style.background=pct>70?'var(--accent3)':pct>40?'var(--accent)':'var(--accent4)';}
   setR('rW','rWB',wRisk); setR('rF','rFB',fRisk); setR('rA','rAB',aRisk);
 }
@@ -895,27 +947,59 @@ function saveTxEdit(){
 }
 window.editTx=editTx;
 
-// ── GRADE EDIT ──
+// ── EXAM SCORE EDIT ──
 function editGrade(subj,period){
-  const d=getD();const val=(d.grades[subj]||{})[period]||'';
+  const d=getD();const entry=(d.grades[subj]||{})[period]||{};
   document.getElementById('edit_grade_subj').value=subj;
   document.getElementById('edit_grade_period').value=period;
   document.getElementById('edit_grade_subj_display').value=subj;
   document.getElementById('edit_grade_period_display').value=period;
-  document.getElementById('edit_grade_val').value=val;
+  document.getElementById('edit_grade_val').value=entry.score!=null?entry.score:'';
+  document.getElementById('edit_grade_total').value=entry.total!=null?entry.total:'';
   openModal('gradeModal');
 }
 function saveGradeEdit(){
   const subj=document.getElementById('edit_grade_subj').value;
   const period=document.getElementById('edit_grade_period').value;
-  const val=parseFloat(document.getElementById('edit_grade_val').value);
-  const maxG=gradeScale==='1-5'?5:4;
-  if(!val||val<1||val>maxG)return alert(`Grade must be between 1.00 and ${maxG}.00.`);
+  const score=parseFloat(document.getElementById('edit_grade_val').value);
+  const total=parseFloat(document.getElementById('edit_grade_total').value);
+  if(isNaN(score)||score<0) return alert('Enter a valid score.');
+  if(isNaN(total)||total<=0) return alert('Enter a valid total.');
+  if(score>total) return alert('Score cannot exceed total.');
   const d=getD();if(!d.grades[subj])d.grades[subj]={};
-  d.grades[subj][period]=val;saveD(d);
+  d.grades[subj][period]={score,total};saveD(d);
   closeModal('gradeModal');renderAll();
 }
-window.editGrade=editGrade;
+function delGrade(subj,period){
+  if(!confirm(`Delete ${period} score for ${subj}?`))return;
+  const d=getD();if(d.grades[subj])delete d.grades[subj][period];saveD(d);renderAll();
+}
+window.editGrade=editGrade; window.delGrade=delGrade;
+
+// ── BUDGET LIMITS EDIT ──
+function openBudgetLimits(){
+  const d=getD(),lim=d.profile.budgetLimits||{};
+  document.getElementById('bl_edit_tuition').value=lim['Tuition']||0;
+  document.getElementById('bl_edit_rent').value=lim['Rent/Bills']||0;
+  document.getElementById('bl_edit_food').value=lim['Food']||0;
+  document.getElementById('bl_edit_transport').value=lim['Transport']||0;
+  document.getElementById('bl_edit_others').value=lim['Others']||0;
+  document.getElementById('bl_edit_maxhrs').value=d.profile.maxWorkHours||40;
+  openModal('budgetLimitsModal');
+}
+function saveBudgetLimits(){
+  const d=getD();
+  if(!d.profile)d.profile={};
+  d.profile.budgetLimits={
+    Tuition:parseFloat(document.getElementById('bl_edit_tuition').value)||0,
+    'Rent/Bills':parseFloat(document.getElementById('bl_edit_rent').value)||0,
+    Food:parseFloat(document.getElementById('bl_edit_food').value)||0,
+    Transport:parseFloat(document.getElementById('bl_edit_transport').value)||0,
+    Others:parseFloat(document.getElementById('bl_edit_others').value)||0,
+  };
+  d.profile.maxWorkHours=parseFloat(document.getElementById('bl_edit_maxhrs').value)||40;
+  saveD(d);closeModal('budgetLimitsModal');renderAll();
+}
 
 // ── INIT ──
 window.onload=()=>{
